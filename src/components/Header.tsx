@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { GoldEmblem } from './LuxuryVisuals';
+import { BrandLogo } from './BrandLogo';
 import { BOUTIQUE_INFO } from '../data/mockData';
 import { Search, Heart, ShoppingBag, Menu, X, Smartphone, Monitor } from 'lucide-react';
 
@@ -25,25 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <>
-      {/* 1. TOP MICRO-BANNER */}
-      <div className="w-full bg-[#0E0E12] border-b border-[#C9A84C]/25 text-[#C9A84C] py-2 px-4 text-center z-40 relative">
-        <div className="max-w-[1440px] mx-auto flex items-center justify-between text-[11px] font-mono tracking-[0.12em] uppercase">
-          <div className="hidden sm:block text-[#9A968E] text-[10px]">
-            PORTO SEGURO · BAHIA
-          </div>
-          <div className="w-full sm:w-auto text-center truncate">
-            OURIVESARIA PRÓPRIA & RELOJOARIA DE PRECISÃO · RUA SÃO PEDRO, 650 - CENTRO, PORTO SEGURO - BA
-          </div>
-          <div className="hidden md:flex items-center gap-2 text-[10px] text-[#C9A84C]">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span>ATELIÊ ABERTO HOJE</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. MAIN NAVBAR (Sticky Dark Glass) */}
-      <header className="sticky top-0 z-40 w-full bg-[#0A0A0C]/90 backdrop-blur-md border-b border-[#C9A84C]/20 transition-all">
+    <header className="sticky top-0 z-40 w-full bg-[#0A0A0C]/90 backdrop-blur-md border-b border-[#C9A84C]/20 transition-all">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12 h-20 flex items-center justify-between gap-4">
           {/* Left: Hamburger + Navigation Links */}
           <div className="flex items-center gap-6">
@@ -92,22 +75,15 @@ export const Header: React.FC<HeaderProps> = ({
             </nav>
           </div>
 
-          {/* Center: Brand Lockup with Minimalist Gold Clock-Ring Emblem */}
+          {/* Center: Official Brand Logo on Navbar */}
           <div
             onClick={() => {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="flex items-center gap-3 cursor-pointer group text-center"
+            className="flex items-center justify-center cursor-pointer group py-1"
+            title="Relojoaria e Joalheria Aliança - Voltar ao início"
           >
-            <GoldEmblem size={28} className="group-hover:rotate-45 transition-transform duration-700 shrink-0" />
-            <div className="flex flex-col items-center">
-              <span className="text-xl sm:text-2xl font-serif tracking-[0.08em] text-[#FAF8F5] font-semibold leading-tight">
-                ALIANÇA
-              </span>
-              <span className="text-[9px] font-mono tracking-[0.24em] uppercase text-[#C9A84C] -mt-0.5 whitespace-nowrap">
-                RELOJOARIA E JOALHERIA
-              </span>
-            </div>
+            <BrandLogo className="h-9 sm:h-11 w-auto group-hover:scale-102 transition-transform duration-300" />
           </div>
 
           {/* Right: Search, Wishlist, Bag & Direct WhatsApp CTA */}
@@ -225,6 +201,5 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         )}
       </header>
-    </>
   );
 };

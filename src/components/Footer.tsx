@@ -1,6 +1,7 @@
 import React from 'react';
 import { BOUTIQUE_INFO } from '../data/mockData';
 import { GoldEmblem } from './LuxuryVisuals';
+import { BrandLogo } from './BrandLogo';
 import { Instagram, MessageCircle, MapPin, Clock } from 'lucide-react';
 
 interface FooterProps {
@@ -19,16 +20,8 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
           {/* Col 1: Brand Logo & Manifesto */}
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <GoldEmblem size={26} />
-              <div>
-                <span className="text-xl font-serif font-bold text-[#FAF8F5] tracking-wider block">
-                  ALIANÇA
-                </span>
-                <span className="text-[8px] font-mono tracking-[0.2em] text-[#C9A84C] uppercase block">
-                  RELOJOARIA E JOALHERIA
-                </span>
-              </div>
+            <div className="flex items-center">
+              <BrandLogo className="h-9 sm:h-10 w-auto" />
             </div>
 
             <p className="text-xs text-[#9A968E] leading-relaxed font-light">

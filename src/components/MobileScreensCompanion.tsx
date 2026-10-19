@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BOUTIQUE_INFO, FEATURED_PRODUCTS } from '../data/mockData';
 import { GoldEmblem } from './LuxuryVisuals';
+import { BrandLogo } from './BrandLogo';
 import {
   Home,
   Grid,
@@ -52,17 +53,9 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
         <motion.div
           whileTap={{ scale: 0.96 }}
           onClick={() => setActiveTab('home')}
-          className="flex items-center gap-2.5 cursor-pointer"
+          className="flex items-center cursor-pointer"
         >
-          <GoldEmblem size={24} />
-          <div className="flex flex-col">
-            <span className="text-base font-serif font-semibold tracking-wider text-[#FAF8F5] leading-none">
-              ALIANÇA
-            </span>
-            <span className="text-[8px] font-mono tracking-[0.22em] text-[#C9A84C] uppercase mt-0.5">
-              PORTO SEGURO · BA
-            </span>
-          </div>
+          <BrandLogo className="h-7 sm:h-8 w-auto" />
         </motion.div>
 
         <div className="flex items-center gap-2">
@@ -122,9 +115,7 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0C] via-transparent to-[#0A0A0C]/40 pointer-events-none" />
 
-              <div className="absolute top-4 left-4 bg-[#0A0A0C]/85 backdrop-blur-md px-3 py-1 border border-[#C9A84C]/35 text-[9px] font-mono text-[#C9A84C] uppercase tracking-wider rounded-full shadow-lg">
-                OURO 18K 750 & HAUTE HORLOGERIE
-              </div>
+
 
               <div className="absolute bottom-5 left-5 right-5 z-10 space-y-2">
                 <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#C9A84C] block">

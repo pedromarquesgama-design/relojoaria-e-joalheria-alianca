@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Sparkles, Volume2, VolumeX, ShieldCheck } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
 
 interface HeroSectionProps {
   onExploreClick: () => void;
@@ -10,7 +11,7 @@ interface HeroSectionProps {
 const SLIDES = [
   {
     eyebrow: 'OURIVESARIA PRÓPRIA EM PORTO SEGURO',
-    headline: 'ALIANÇAS EM OURO 18K FORJADAS PARA UMA VIDA INTEIRA.',
+    headline: 'ALIANÇAS EM OURO FORJADAS PARA UMA VIDA INTEIRA.',
     subtitle:
       'Pares confeccionados em barra maciça de ouro 18k pelo mestre Hivo Marques, com interior anatômico e ajuste sob medida na Rua São Pedro.',
     tag: 'DESTAQUE PRINCIPAL',
@@ -80,18 +81,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             className="flex flex-col justify-between"
           >
             <div>
-              {/* Eyebrow Label with Soft Pill Badge */}
+              {/* Brand Logo on top of headline (2x bigger) */}
               <motion.div
-                key={`eyebrow-${activeSlide}`}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 mb-5 px-3.5 py-1.5 rounded-full bg-[#171720]/90 border border-[#C9A84C]/35 backdrop-blur-md"
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                style={{ fontSize: '120px' }}
+                className="mb-6 sm:mb-8 flex items-center text-[120px]"
               >
-                <span className="w-2 h-2 rounded-full bg-[#C9A84C] animate-ping" />
-                <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-[#C9A84C] font-semibold">
-                  {slide.eyebrow}
-                </span>
+                <BrandLogo className="h-[80px] sm:h-[105px] lg:h-[120px] w-auto max-w-full" />
               </motion.div>
 
               {/* Main Headline with Smooth Text Motion */}
@@ -112,10 +110,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <AnimatePresence mode="wait">
                 <motion.p
                   key={`sub-${activeSlide}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   className="text-base sm:text-lg text-[#9A968E] font-light leading-relaxed mb-8 max-w-xl"
                 >
                   {slide.subtitle}
@@ -147,7 +147,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
 
             {/* Slide Indicator at bottom-left: 01 ————— 04 with Soft Rounded Pill Design */}
-            <div className="flex items-center gap-4 pt-4 border-t border-white/10">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="flex items-center gap-4 pt-4 border-t border-white/10"
+            >
               <span className="text-xs font-mono font-medium text-[#FAF8F5]">
                 {`0${activeSlide + 1}`}
               </span>
@@ -190,7 +196,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   →
                 </button>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
 
           {/* Right Column: Real Luxury Video with Soft Rounded 3xl Silhouette and Motion */}
@@ -215,35 +221,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
-                  className="w-full h-full object-cover object-center filter brightness-95 contrast-105"
+                  className="w-full h-full object-cover object-center filter brightness-95 contrast-105 border-none"
+                  style={{ borderStyle: 'none' }}
                 />
               </AnimatePresence>
 
               {/* Dark chiaroscuro soft vignettes */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0C]/90 via-transparent to-[#0A0A0C]/40 pointer-events-none" />
 
-              {/* Top Badge Overlay with Rounded Pill Shape */}
-              <div className="absolute top-5 left-5 right-5 flex items-center justify-between z-10 pointer-events-none">
-                <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#C9A84C] bg-[#0A0A0C]/85 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-[#C9A84C]/40 shadow-lg font-semibold">
-                  {slide.badge}
-                </span>
-
+              {/* Audio Toggle Button */}
+              <div className="absolute top-5 right-5 z-10">
                 <button
                   type="button"
                   onClick={() => setIsMuted(!isMuted)}
-                  className="pointer-events-auto p-2 rounded-full bg-[#0A0A0C]/85 hover:bg-[#C9A84C] text-[#FAF8F5] hover:text-[#0A0A0C] border border-white/15 transition-all shadow-lg"
+                  className="p-2.5 rounded-full bg-[#0A0A0C]/80 hover:bg-[#C9A84C] text-[#FAF8F5] hover:text-[#0A0A0C] border border-white/10 transition-all shadow-lg cursor-pointer"
                   title={isMuted ? 'Ativar áudio' : 'Mutar áudio'}
+                  aria-label={isMuted ? 'Ativar áudio' : 'Mutar áudio'}
                 >
                   {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
                 </button>
-              </div>
-
-              {/* Bottom Metadata Inscription with Rounded Card Inset */}
-              <div className="absolute bottom-5 left-5 right-5 z-10 bg-[#0A0A0C]/90 backdrop-blur-md border border-[#C9A84C]/30 p-4 rounded-2xl shadow-xl">
-                <div className="flex items-center justify-between text-[11px] font-mono text-[#FAF8F5]">
-                  <span className="truncate pr-2 font-medium">{slide.meta}</span>
-                  <span className="text-[#C9A84C] shrink-0 font-semibold">PORTO SEGURO</span>
-                </div>
               </div>
             </motion.div>
           </div>
