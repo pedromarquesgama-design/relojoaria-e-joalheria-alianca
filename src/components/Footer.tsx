@@ -1,8 +1,6 @@
 import React from 'react';
 import { BOUTIQUE_INFO } from '../data/mockData';
-import { GoldEmblem } from './LuxuryVisuals';
 import { BrandLogo } from './BrandLogo';
-import { Instagram, MessageCircle, MapPin, Clock } from 'lucide-react';
 
 interface FooterProps {
   onNavigateSection: (sec: string) => void;
@@ -16,8 +14,8 @@ export const Footer: React.FC<FooterProps> = ({
   return (
     <footer className="w-full bg-[#070709] border-t border-[#C9A84C]/25 text-[#FAF8F5] pt-16 pb-12">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-12">
-        {/* 4 Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
+        {/* 3 Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-14">
           {/* Col 1: Brand Logo & Manifesto */}
           <div className="space-y-4">
             <div className="flex items-center">
@@ -28,10 +26,6 @@ export const Footer: React.FC<FooterProps> = ({
               Boutique tradicional de alta relojoaria e ourivesaria artesanal em Porto Seguro, Bahia.
               Criando alianças eternas, joias em ouro 18k e precisão micromecânica que atravessam gerações.
             </p>
-
-            <div className="pt-2 text-[11px] font-mono text-[#C9A84C]">
-              CNPJ Ativo & Oficina Própria Registrada
-            </div>
           </div>
 
           {/* Col 2: COLEÇÕES */}
@@ -131,45 +125,6 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
             </ul>
           </div>
-
-          {/* Col 4: CONTATO & HORÁRIOS */}
-          <div className="space-y-3">
-            <h4 className="text-xs font-mono font-semibold tracking-[0.16em] uppercase text-[#FAF8F5]">
-              Contato & Localização
-            </h4>
-
-            <div className="space-y-2.5 text-xs text-[#9A968E] font-light">
-              <div className="flex items-start gap-2">
-                <MapPin size={14} className="text-[#C9A84C] shrink-0 mt-0.5" />
-                <span>{BOUTIQUE_INFO.address}</span>
-              </div>
-
-              <div className="flex items-start gap-2">
-                <Clock size={14} className="text-[#C9A84C] shrink-0 mt-0.5" />
-                <div>
-                  <p>{BOUTIQUE_INFO.hoursWeekday}</p>
-                  <p>{BOUTIQUE_INFO.hoursSaturday}</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 pt-2">
-                <a
-                  href={`https://wa.me/${BOUTIQUE_INFO.whatsappRaw}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#171720] hover:bg-[#20202E] text-[#FAF8F5] border border-[#C9A84C]/35 hover:border-[#C9A84C] rounded-full transition-all font-mono text-[11px] shadow-sm hover:shadow-[0_0_15px_rgba(201,168,76,0.2)]"
-                >
-                  <MessageCircle size={14} className="text-emerald-400" />
-                  <span>WhatsApp: {BOUTIQUE_INFO.phone}</span>
-                </a>
-              </div>
-
-              <div className="flex items-center gap-2 pt-1">
-                <span className="text-[11px] font-mono text-[#C9A84C]">Instagram:</span>
-                <span className="text-[11px] font-mono text-[#FAF8F5]">{BOUTIQUE_INFO.instagram}</span>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Bottom Sub-Footer Bar */}
@@ -178,8 +133,6 @@ export const Footer: React.FC<FooterProps> = ({
             © {new Date().getFullYear()} Relojoaria e Joalheria Aliança. Todos os direitos reservados.
           </div>
           <div className="flex items-center gap-4">
-            <span>Ourivesaria: {BOUTIQUE_INFO.goldsmithInstagram}</span>
-            <span>·</span>
             <span>Porto Seguro - BA</span>
           </div>
         </div>

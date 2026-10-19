@@ -68,9 +68,6 @@ export const Header: React.FC<HeaderProps> = ({
                 className="text-[#C9A84C] hover:text-[#FAF8F5] transition-colors whitespace-nowrap cursor-pointer py-1 font-semibold flex items-center gap-1"
               >
                 <span>OFICINA</span>
-                <span className="text-[9px] px-1 py-0.2 bg-[#C9A84C]/15 border border-[#C9A84C]/30 text-[#C9A84C]">
-                  ATELIER
-                </span>
               </button>
             </nav>
           </div>
@@ -98,35 +95,7 @@ export const Header: React.FC<HeaderProps> = ({
               <Search size={19} />
             </button>
 
-            {/* Wishlist */}
-            <button
-              onClick={onOpenWishlist}
-              className="relative p-2.5 text-[#9A968E] hover:text-[#FAF8F5] transition-colors rounded-full hover:bg-white/5"
-              aria-label="Favoritos"
-              title="Peças favoritadas"
-            >
-              <Heart size={19} />
-              {wishlistCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#C9A84C] text-[#0A0A0C] font-mono text-[9px] font-bold flex items-center justify-center">
-                  {wishlistCount}
-                </span>
-              )}
-            </button>
 
-            {/* Shopping Bag */}
-            <button
-              onClick={onOpenCart}
-              className="relative p-2.5 text-[#9A968E] hover:text-[#FAF8F5] transition-colors rounded-full hover:bg-white/5"
-              aria-label="Sacola de atendimento"
-              title="Sacola digital"
-            >
-              <ShoppingBag size={19} />
-              {cartCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#D4943E] text-[#0A0A0C] font-mono text-[9px] font-bold flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </button>
 
             {/* Subtle Gold Border WhatsApp Action with Soft Pill Rounded-full */}
             <a

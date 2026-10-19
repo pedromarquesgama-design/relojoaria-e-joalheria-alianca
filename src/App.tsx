@@ -3,12 +3,9 @@ import { Product, CartItem } from './types';
 import { FEATURED_PRODUCTS } from './data/mockData';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
-import { ScrollytellingShowcase } from './components/ScrollytellingShowcase';
 import { CategoryShowcase } from './components/CategoryShowcase';
 import { FeaturedGrid } from './components/FeaturedGrid';
-import { SplitBento } from './components/SplitBento';
 import { CraftsmanshipSection } from './components/CraftsmanshipSection';
-import { TrustStrip } from './components/TrustStrip';
 import { Footer } from './components/Footer';
 import { ProductModal } from './components/ProductModal';
 import { CartDrawer } from './components/CartDrawer';
@@ -133,11 +130,7 @@ export default function App() {
               onCustomQuoteClick={() => setAtelierOpen(true)}
             />
 
-            {/* 3. Ateliê Imersivo / Scrollytelling Unificado (Marquee 12vw, vídeos e contadores animados) */}
-            <ScrollytellingShowcase
-              onOpenAtelier={() => setAtelierOpen(true)}
-              onExploreProducts={() => handleScrollToSection('pecas-destaque')}
-            />
+
 
             {/* 4. Categorias da Boutique com 4 vídeos reais em looping */}
             <CategoryShowcase
@@ -152,17 +145,12 @@ export default function App() {
               isWishlisted={isWishlisted}
             />
 
-            {/* 6. Bento Grid Lançamentos & Fabricação com vídeos dedicados */}
-            <SplitBento
-              onOpenAtelier={() => setAtelierOpen(true)}
-              onExploreCategory={(cat) => handleScrollToSection('pecas-destaque')}
-            />
+
 
             {/* 7. Craftsmanship Section com vídeo real do mestre ourives soldando na bancada */}
             <CraftsmanshipSection onOpenAtelier={() => setAtelierOpen(true)} />
 
-            {/* 8. Trust Signals & Autoridade Local */}
-            <TrustStrip />
+
           </main>
 
           {/* 9. Footer Executivo Dark Luxury */}

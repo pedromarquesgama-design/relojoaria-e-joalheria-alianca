@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, Sparkles, Volume2, VolumeX, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Sparkles, Volume2, VolumeX, ShieldCheck, MessageCircle } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 
 interface HeroSectionProps {
@@ -140,8 +140,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   onClick={onCustomQuoteClick}
                   className="px-6 py-4 bg-[#121216]/80 hover:bg-[#1A1A22] text-[#FAF8F5] hover:text-[#C9A84C] border border-[#C9A84C]/40 hover:border-[#C9A84C] text-xs font-mono tracking-[0.12em] uppercase transition-all rounded-full flex items-center justify-center gap-2 backdrop-blur-md cursor-pointer"
                 >
-                  <Sparkles size={14} className="text-[#C9A84C]" />
-                  <span>ENCOMENDAR SOB MEDIDA</span>
+                  <MessageCircle size={15} className="text-[#C9A84C]" />
+                  <span>WHATSAPP DA LOJA</span>
                 </motion.button>
               </div>
             </div>

@@ -22,10 +22,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 pb-5 border-b border-white/5">
           <div>
-            <div className="inline-flex items-center gap-2 mb-2 px-3 py-1 rounded-full bg-[#121216] border border-[#C9A84C]/30 text-[10px] font-mono tracking-[0.2em] uppercase text-[#C9A84C]">
-              <Sparkles size={11} />
-              <span>O UNIVERSO ALIANÇA</span>
-            </div>
             <h2 className="text-3xl md:text-4xl font-serif text-[#FAF8F5] tracking-tight">
               Categorias da Boutique
             </h2>
@@ -58,15 +54,6 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
               onClick={() => onSelectCategory(cat.id)}
               className="group relative bg-[#121216] border border-[#C9A84C]/25 hover:border-[#C9A84C]/80 transition-all duration-300 rounded-2xl overflow-hidden cursor-pointer flex flex-col justify-between shadow-[0_12px_35px_rgba(0,0,0,0.85)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.95),0_0_25px_rgba(201,168,76,0.2)]"
             >
-              {/* Top Meta Strip with Rounded Pill Tags */}
-              <div className="p-4 flex items-center justify-between border-b border-white/5 z-10 bg-[#121216]/85 backdrop-blur-md">
-                <span className="text-[10px] font-mono tracking-wider text-[#C9A84C] uppercase px-2.5 py-0.5 rounded-full bg-[#0A0A0C]/80 border border-[#C9A84C]/20 font-semibold">
-                  {cat.tag}
-                </span>
-                <span className="text-[10px] font-mono text-[#FAF8F5] px-2 py-0.5 rounded-full bg-white/5 border border-white/5">
-                  {cat.itemCount} PEÇAS
-                </span>
-              </div>
 
               {/* Center Macro Visual / Video */}
               <div className="relative w-full aspect-[3/4] flex items-center justify-center overflow-hidden bg-[#0A0A0C]">

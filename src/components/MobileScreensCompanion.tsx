@@ -10,7 +10,6 @@ import {
   ShieldCheck,
   Check,
   ChevronLeft,
-  Flame,
   Wrench,
   Sparkles,
   MapPin,
@@ -118,9 +117,6 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
 
 
               <div className="absolute bottom-5 left-5 right-5 z-10 space-y-2">
-                <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#C9A84C] block">
-                  TRADIÇÃO EM PORTO SEGURO
-                </span>
                 <h2 className="text-2xl font-serif text-[#FAF8F5] leading-tight">
                   Alianças em Ouro 18K & Alta Relojoaria
                 </h2>
@@ -201,9 +197,6 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
             className="space-y-4 px-4 pt-4"
           >
             <div className="border-b border-white/5 pb-3">
-              <span className="text-[10px] font-mono tracking-widest text-[#C9A84C] uppercase block">
-                O UNIVERSO ALIANÇA
-              </span>
               <h3 className="text-xl font-serif text-[#FAF8F5]">Categorias da Boutique</h3>
             </div>
 
@@ -366,10 +359,7 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                 />
               )}
 
-              {/* Counter Pill */}
-              <div className="absolute top-3 right-3 bg-[#0A0A0C]/85 backdrop-blur-md border border-white/10 px-3 py-1 text-[9px] font-mono text-[#FAF8F5] rounded-full">
-                {screen3PhotoIndex} / 4 ÂNGULOS
-              </div>
+
 
               {/* Navigation Dots */}
               <div className="absolute bottom-3 left-0 right-0 flex items-center justify-center gap-1.5 z-10">
@@ -390,10 +380,6 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-mono text-[#C9A84C] uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/5">
                   {product.category}
-                </span>
-                <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1 bg-emerald-950/40 border border-emerald-500/30 px-3 py-0.5 rounded-full">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  DISPONÍVEL NA LOJA
                 </span>
               </div>
 
@@ -479,9 +465,6 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
             className="space-y-6 px-4 pt-4"
           >
             <div className="border-b border-white/5 pb-3">
-              <span className="text-[10px] font-mono tracking-widest text-[#C9A84C] uppercase block">
-                BANCADA ATIVA · PORTO SEGURO
-              </span>
               <h3 className="text-xl font-serif text-[#FAF8F5]">A Arte da Ourivesaria</h3>
             </div>
 
@@ -506,23 +489,6 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                 <span className="text-sm font-serif text-[#FAF8F5] block font-medium">
                   Forja Manual do Lingote à Joia
                 </span>
-                <p className="text-[11px] font-mono text-[#9A968E]">
-                  Rua São Pedro, 650 - Centro de Porto Seguro
-                </p>
-              </div>
-            </div>
-
-            {/* Workshop Specs Cards */}
-            <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-              <div className="p-3.5 bg-[#121216] border border-white/10 rounded-2xl space-y-1 shadow-sm">
-                <Flame size={16} className="text-[#C9A84C]" />
-                <span className="text-[#FAF8F5] block font-semibold">Ouro 18K 750</span>
-                <span className="text-[10px] text-[#9A968E] block">Fusão Própria</span>
-              </div>
-              <div className="p-3.5 bg-[#121216] border border-white/10 rounded-2xl space-y-1 shadow-sm">
-                <Wrench size={16} className="text-[#C9A84C]" />
-                <span className="text-[#FAF8F5] block font-semibold">0.02 mm</span>
-                <span className="text-[10px] text-[#9A968E] block">Ajuste na Bancada</span>
               </div>
             </div>
 
