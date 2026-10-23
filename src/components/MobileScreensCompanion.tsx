@@ -112,13 +112,19 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
           activeTab === 'home'
             ? 'app-shell flex flex-col overflow-hidden'
             : activeTab === 'workshop'
-              ? 'app-shell flex flex-col overflow-hidden pb-[calc(4rem_+_env(safe-area-inset-bottom))]'
+              ? 'app-shell relative flex flex-col overflow-hidden pb-[calc(4rem_+_env(safe-area-inset-bottom))]'
               : 'flex min-h-screen flex-col pb-16'
         }
       >
       {/* 1. Mobile Fixed Top Header — hidden on the landing screen, which owns its own centered header */}
       {activeTab !== 'home' && (
-      <header className="sticky top-0 z-40 bg-[#0A0A0C]/90 backdrop-blur-md border-b border-[#C9A84C]/25 px-4 h-16 flex items-center justify-between">
+      <header
+        className={`z-40 h-16 border-b border-[#C9A84C]/25 px-4 ${
+          activeTab === 'workshop'
+            ? 'absolute inset-x-0 top-0 bg-transparent'
+            : 'sticky top-0 bg-[#0A0A0C]/90 backdrop-blur-md'
+        } flex items-center justify-between`}
+      >
         <motion.div
           whileTap={{ scale: 0.96 }}
           onClick={() => setActiveTab('home')}
@@ -450,86 +456,101 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35 }}
-            className="flex min-h-0 flex-1 flex-col gap-3 px-4 pt-3"
+            className="relative flex min-h-0 flex-1 flex-col overflow-hidden"
           >
-            <div className="flex items-baseline justify-between gap-3 border-b border-white/5 pb-2">
-              <h3 className="text-lg font-serif leading-tight text-[#FAF8F5]">
-                A Arte da Ourivesaria
-              </h3>
-              <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.12em] text-[#C9A84C]">
-                Oficina &amp; Ateliê
-              </span>
-            </div>
+            {/* Full-bleed workshop film — the whole content area is the video */}
+            <video
+              src="/videos/ourives-bancada.mp4"
+              poster="/videos/ourives-bancada.jpg"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 h-full w-full object-cover object-center filter brightness-90"
+            />
 
-            {/* Workshop Master Goldsmith Video — flexes to absorb the leftover
-                height, so the screen fills the viewport edge to edge. */}
-            <div className="relative min-h-[170px] w-full flex-1 overflow-hidden rounded-2xl border border-[#C9A84C]/35 bg-[#121216] shadow-xl">
-              <video
-                src="/videos/ourives-bancada.mp4"
-                poster="/videos/ourives-bancada.jpg"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="absolute inset-0 h-full w-full object-cover object-center filter brightness-95"
-              />
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0A0A0C] via-[#0A0A0C]/10 to-transparent" />
+            {/* Scrims: darken top for the heading, bottom for the details card */}
+            <div
+              className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#0A0A0C]/75 via-[#0A0A0C]/20 to-[#0A0A0C]/85"
+              aria-hidden="true"
+            />
+            <div
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-[#0A0A0C] via-[#0A0A0C]/85 to-transparent"
+              aria-hidden="true"
+            />
 
-              <div className="absolute left-3 top-3 rounded-full border border-[#C9A84C]/30 bg-[#121216]/90 px-2.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-[#C9A84C] shadow-lg backdrop-blur-md">
-                MESTRE HIVO MARQUES
-              </div>
-
-              <div className="absolute inset-x-3 bottom-2.5 z-10">
-                <span className="block font-serif text-[13px] font-medium leading-tight text-[#FAF8F5]">
-                  Forja Manual do Lingote à Joia
+            {/* Overlaid content */}
+            <div className="relative z-10 flex h-full min-h-0 flex-col px-4 pt-[76px] pb-1">
+              <div className="flex items-baseline justify-between gap-3 border-b border-white/15 pb-2">
+                <h3 className="text-lg font-serif leading-tight text-[#FAF8F5] drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+                  A Arte da Ourivesaria
+                </h3>
+                <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.12em] text-[#C9A84C] drop-shadow-[0_1px_6px_rgba(0,0,0,0.95)]">
+                  Oficina &amp; Ateliê
                 </span>
               </div>
-            </div>
 
-            {/* Address & Hours — one compact card, tighter type */}
-            <div className="space-y-2 rounded-2xl border border-[#C9A84C]/25 bg-[#121216] p-3.5 shadow-md">
-              <div className="flex items-start gap-2.5">
-                <MapPin size={14} className="mt-0.5 shrink-0 text-[#C9A84C]" />
-                <div className="min-w-0">
-                  <span className="block font-serif text-[11px] font-medium text-[#FAF8F5]">
-                    Endereço da Boutique
-                  </span>
-                  <p className="mt-0.5 text-[11px] font-light leading-snug text-[#9A968E]">
-                    {BOUTIQUE_INFO.address}
-                  </p>
+              <div className="mt-3">
+                <span className="rounded-full border border-[#C9A84C]/40 bg-[#0A0A0C]/70 px-2.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-[#C9A84C] shadow-lg backdrop-blur-md">
+                  MESTRE HIVO MARQUES
+                </span>
+              </div>
+
+              {/* The video keeps this middle band clear */}
+              <div className="min-h-0 flex-1" />
+
+              <span
+                className="mb-2 block font-serif text-[13px] font-medium leading-tight text-[#FAF8F5]"
+                style={{ textShadow: '0 1px 2px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.95)' }}
+              >
+                Forja Manual do Lingote à Joia
+              </span>
+
+              {/* Address & Hours — glass card floating over the film */}
+              <div className="space-y-2 rounded-2xl border border-[#C9A84C]/30 bg-[#0A0A0C]/75 p-3.5 shadow-[0_18px_40px_rgba(0,0,0,0.65)] backdrop-blur-md">
+                <div className="flex items-start gap-2.5">
+                  <MapPin size={14} className="mt-0.5 shrink-0 text-[#C9A84C]" />
+                  <div className="min-w-0">
+                    <span className="block font-serif text-[11px] font-medium text-[#FAF8F5]">
+                      Endereço da Boutique
+                    </span>
+                    <p className="mt-0.5 text-[11px] font-light leading-snug text-[#B9B4AC]">
+                      {BOUTIQUE_INFO.address}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-2.5 border-t border-white/10 pt-2">
+                  <Clock size={14} className="mt-0.5 shrink-0 text-[#C9A84C]" />
+                  <div className="min-w-0">
+                    <span className="block font-serif text-[11px] font-medium text-[#FAF8F5]">
+                      Horário de Funcionamento
+                    </span>
+                    <p className="mt-0.5 font-mono text-[10px] leading-snug text-[#B9B4AC]">
+                      {BOUTIQUE_INFO.hoursWeekday}
+                    </p>
+                    <p className="font-mono text-[10px] leading-snug text-[#B9B4AC]">
+                      {BOUTIQUE_INFO.hoursSaturday}
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex items-start gap-2.5 border-t border-white/5 pt-2">
-                <Clock size={14} className="mt-0.5 shrink-0 text-[#C9A84C]" />
-                <div className="min-w-0">
-                  <span className="block font-serif text-[11px] font-medium text-[#FAF8F5]">
-                    Horário de Funcionamento
-                  </span>
-                  <p className="mt-0.5 font-mono text-[10px] leading-snug text-[#9A968E]">
-                    {BOUTIQUE_INFO.hoursWeekday}
-                  </p>
-                  <p className="font-mono text-[10px] leading-snug text-[#9A968E]">
-                    {BOUTIQUE_INFO.hoursSaturday}
-                  </p>
-                </div>
-              </div>
+              {/* Direct WhatsApp Call */}
+              <motion.a
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                href={`https://wa.me/${BOUTIQUE_INFO.whatsappRaw}?text=${encodeURIComponent(
+                  'Olá, mestre ourives Hivo Marques! Gostaria de agendar uma visita na oficina para provar alianças.'
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#D4943E] to-[#C9A84C] text-[11px] font-mono font-bold uppercase tracking-wider text-[#0A0A0C] shadow-[0_12px_30px_rgba(0,0,0,0.55)] transition-colors hover:from-[#C9A84C] hover:to-[#D4943E]"
+              >
+                <WhatsAppGlyph size={14} />
+                <span>FALAR COM O OURIVES NO WHATSAPP</span>
+              </motion.a>
             </div>
-
-            {/* Direct WhatsApp Call */}
-            <motion.a
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              href={`https://wa.me/${BOUTIQUE_INFO.whatsappRaw}?text=${encodeURIComponent(
-                'Olá, mestre ourives Hivo Marques! Gostaria de agendar uma visita na oficina para provar alianças.'
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#D4943E] to-[#C9A84C] text-[11px] font-mono font-bold uppercase tracking-wider text-[#0A0A0C] shadow-lg transition-colors hover:from-[#C9A84C] hover:to-[#D4943E]"
-            >
-              <WhatsAppGlyph size={14} />
-              <span>FALAR COM O OURIVES NO WHATSAPP</span>
-            </motion.a>
           </motion.div>
         )}
       </main>
