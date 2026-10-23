@@ -13,6 +13,7 @@ import { WishlistDrawer } from './components/WishlistDrawer';
 import { SearchModal } from './components/SearchModal';
 import { AtelierModal } from './components/AtelierModal';
 import { MobileScreensCompanion } from './components/MobileScreensCompanion';
+import { MobileLandingPage } from './components/MobileLandingPage';
 
 export default function App() {
   const [isMobile, setIsMobile] = useState(() =>

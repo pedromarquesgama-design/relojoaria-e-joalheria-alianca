@@ -59,9 +59,9 @@ export const CATEGORIES: CategoryItem[] = [
 export const FEATURED_PRODUCTS: Product[] = [
   {
     id: 'prod-1',
-    category: 'ALIANÇAS OURO 18K',
+    category: 'ALIANÇAS OURO & PRATA',
     categoryTag: 'Ourivesaria Própria',
-    title: 'Par de Alianças Anatômicas Chanfradas',
+    title: 'Pares de Alianças em Ouro e Prata',
     ref: 'REF. AL-18K-01',
     price: 'R$ 3.890',
     rawPrice: 3890,

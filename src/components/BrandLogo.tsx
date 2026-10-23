@@ -4,6 +4,8 @@ interface BrandLogoProps {
   className?: string;
   variant?: 'full' | 'compact' | 'emblem';
   showSubtitle?: boolean;
+  /** Renders the wordmark heavier and the subtitle bolder for hero placements. */
+  emphasis?: boolean;
   onClick?: () => void;
 }
 
@@ -11,6 +13,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   className = 'h-11 w-auto',
   variant = 'full',
   showSubtitle = true,
+  emphasis = false,
   onClick,
 }) => {
   return (
@@ -145,7 +148,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
             y="76"
             fontFamily="'Playfair Display', Georgia, serif"
             fontSize="54"
-            fontWeight="600"
+            fontWeight={emphasis ? '700' : '600'}
             letterSpacing="5"
             fill="url(#aliancaGoldGrad)"
           >
@@ -162,9 +165,9 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
               x="152"
               y="108"
               fontFamily="'Plus Jakarta Sans', system-ui, sans-serif"
-              fontSize="16.5"
-              fontWeight="500"
-              letterSpacing="7.5"
+              fontSize={emphasis ? '18' : '16.5'}
+              fontWeight={emphasis ? '600' : '500'}
+              letterSpacing={emphasis ? '6.5' : '7.5'}
               fill="#FAF8F5"
               opacity="0.98"
             >

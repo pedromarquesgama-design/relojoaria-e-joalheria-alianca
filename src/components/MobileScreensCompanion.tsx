@@ -1,21 +1,49 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { BOUTIQUE_INFO, FEATURED_PRODUCTS } from '../data/mockData';
-import { GoldEmblem } from './LuxuryVisuals';
 import { BrandLogo } from './BrandLogo';
+import { MobileLandingPage } from './MobileLandingPage';
+import { InterlockingRings, WhatsAppGlyph } from './HouseIcons';
 import {
   Home,
   Grid,
-  MessageCircle,
-  ArrowRight,
-  ShieldCheck,
   Check,
-  ChevronLeft,
   Wrench,
-  Sparkles,
   MapPin,
   Clock
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+
+/**
+ * Product photography shown in the "Alianças" screen carousel.
+ * Images are shipped as WebP with the white studio background keyed out,
+ * so they sit directly on the dark page.
+ */
+const PRODUCT_SHOTS = [
+  {
+    src: '/products/conjunto-dourado.webp',
+    alt: 'Par de alianças e anel de diamante em ouro 18k sobre veludo vermelho',
+  },
+  {
+    src: '/products/anel-diamante.webp',
+    alt: 'Anel de diamante solitário em caixa de veludo vermelho',
+  },
+  {
+    src: '/products/brincos-dourados-estojo.webp',
+    alt: 'Par de alianças douradas em estojo de veludo vermelho',
+  },
+  {
+    src: '/products/brincos-dourados-caixa.webp',
+    alt: 'Par de alianças douradas em caixa de veludo vermelho',
+  },
+  {
+    src: '/products/conjunto-prateado.webp',
+    alt: 'Conjunto de alianças prateadas com anel de diamante em veludo vermelho',
+  },
+  {
+    src: '/products/brincos-prateados-estojo.webp',
+    alt: 'Par de alianças prateadas em estojo de veludo vermelho',
+  },
+];
 
 interface MobileScreensCompanionProps {
   onOpenProductModal?: (prod: any) => void;
@@ -27,52 +55,93 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
   const [activeTab, setActiveTab] = useState<'home' | 'categories' | 'product' | 'workshop'>('home');
   const [screen3PhotoIndex, setScreen3PhotoIndex] = useState(1);
   const [selectedRingSize, setSelectedRingSize] = useState('18');
+  const [selectedMetal, setSelectedMetal] = useState<'Ouro' | 'Prata'>('Ouro');
   const [engravingText, setEngravingText] = useState('');
   const [actionFeedback, setActionFeedback] = useState<string | null>(null);
 
-  const product = FEATURED_PRODUCTS[0]; // Par de Alianças Anatômicas Chanfradas
+  const product = FEATURED_PRODUCTS[0]; // Pares de Alianças em Ouro e Prata
 
   const triggerFeedback = (msg: string) => {
     setActionFeedback(msg);
     setTimeout(() => setActionFeedback(null), 2500);
   };
 
+  /* ---- Swipe between the product photos ----
+     The index is 1-based so it lines up with the dots (0 = nothing shown). */
+  const shotGesture = useRef<{ x: number; y: number } | null>(null);
+
+  const handleShotPointerDown = (e: React.PointerEvent) => {
+    shotGesture.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleShotPointerUp = (e: React.PointerEvent) => {
+    const start = shotGesture.current;
+    shotGesture.current = null;
+    if (!start) return;
+
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+
+    /* Horizontal intent only, so a vertical scroll never changes the photo. */
+    if (Math.abs(dx) < 40 || Math.abs(dx) <= Math.abs(dy)) return;
+
+    const total = PRODUCT_SHOTS.length;
+    setScreen3PhotoIndex((current) =>
+      dx < 0 ? (current % total) + 1 : ((current - 2 + total) % total) + 1
+    );
+  };
+
+  const handleShotPointerCancel = () => {
+    shotGesture.current = null;
+  };
+
   const openWhatsApp = (customMsg?: string) => {
     const text = encodeURIComponent(
       customMsg ||
-        `Olá, Relojoaria e Joalheria Aliança!\nVi o Par de Alianças Anatômicas Chanfradas (Ref: AL-18K-01) no catálogo e gostaria de verificar a disponibilidade na loja de Porto Seguro.`
+        `Olá, Relojoaria e Joalheria Aliança!\nVi o ${product.title} (${product.ref}) no catálogo e gostaria de verificar a disponibilidade na loja de Porto Seguro.`
     );
     window.open(`https://wa.me/${BOUTIQUE_INFO.whatsappRaw}?text=${text}`, '_blank');
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#0A0A0C] text-[#FAF8F5] pb-24 flex flex-col font-sans selection:bg-[#C9A84C]/30 selection:text-[#FAF8F5]">
-      {/* 1. Mobile Fixed Top Header */}
+    <div className="w-full bg-[#0A0A0C] text-[#FAF8F5] font-sans selection:bg-[#C9A84C]/30 selection:text-[#FAF8F5]">
+      {/* Mobile fixed-viewport shell: the landing screen fills the screen exactly,
+          the other screens scroll inside their own container. */}
+      <div
+        className={
+          activeTab === 'home'
+            ? 'app-shell flex flex-col overflow-hidden'
+            : 'flex min-h-screen flex-col pb-16'
+        }
+      >
+      {/* 1. Mobile Fixed Top Header — hidden on the landing screen, which owns its own centered header */}
+      {activeTab !== 'home' && (
       <header className="sticky top-0 z-40 bg-[#0A0A0C]/90 backdrop-blur-md border-b border-[#C9A84C]/25 px-4 h-16 flex items-center justify-between">
         <motion.div
           whileTap={{ scale: 0.96 }}
           onClick={() => setActiveTab('home')}
           className="flex items-center cursor-pointer"
         >
-          <BrandLogo className="h-7 sm:h-8 w-auto" />
+          <BrandLogo className="h-10 sm:h-11 w-auto" emphasis />
         </motion.div>
 
         <div className="flex items-center gap-2">
           <motion.a
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             href={`https://wa.me/${BOUTIQUE_INFO.whatsappRaw}?text=${encodeURIComponent(
               'Olá! Gostaria de falar com o ourives da Relojoaria Aliança em Porto Seguro.'
             )}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#C9A84C] text-[#0A0A0C] text-[10px] font-mono font-bold tracking-wider uppercase rounded-full shadow-md"
+            className="flex items-center gap-1.5 rounded-full border border-[#C9A84C]/55 bg-[#0B0B0B] px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.12em] text-[#C9A84C] transition-colors duration-300 hover:border-[#C9A84C] hover:bg-[#C9A84C]/[0.08]"
           >
-            <MessageCircle size={13} />
-            <span>WhatsApp</span>
+            <WhatsAppGlyph size={12} className="text-[#C9A84C]" />
+            <span>WhatsApp da loja</span>
           </motion.a>
         </div>
       </header>
+      )}
 
       {/* Floating Feedback Notification */}
       <AnimatePresence>
@@ -90,100 +159,20 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
       </AnimatePresence>
 
       {/* 2. Main Content Screens */}
-      <main className="flex-1">
+      <main
+        className={
+          activeTab === 'home'
+            ? 'flex min-h-0 flex-1 flex-col overflow-hidden'
+            : 'flex-1 pb-4'
+        }
+      >
         {/* =========================================================
-            SCREEN 1: HOME (Início)
+            SCREEN 1: HOME (Landing vertical premium)
             ========================================================= */}
         {activeTab === 'home' && (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35 }}
-            className="space-y-6 px-4 pt-4"
-          >
-            {/* Real HD Video Hero */}
-            <div className="relative aspect-[4/5] w-full bg-[#121216] border border-[#C9A84C]/35 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
-              <video
-                src="/videos/hero-aliancas.mp4"
-                poster="/videos/hero-aliancas.jpg"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover object-center filter brightness-95"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0C] via-transparent to-[#0A0A0C]/40 pointer-events-none" />
-
-
-
-              <div className="absolute bottom-5 left-5 right-5 z-10 space-y-2">
-                <h2 className="text-2xl font-serif text-[#FAF8F5] leading-tight">
-                  Alianças em Ouro 18K & Alta Relojoaria
-                </h2>
-                <p className="text-xs text-[#9A968E] line-clamp-2 font-light">
-                  Fabricação própria na bancada da Rua São Pedro pelo mestre ourives Hivo Marques.
-                </p>
-              </div>
-            </div>
-
-            {/* Quick Action Grid */}
-            <div className="grid grid-cols-2 gap-3">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setActiveTab('product')}
-                className="p-4 bg-[#121216] border border-[#C9A84C]/30 rounded-2xl text-left hover:border-[#C9A84C] transition-all shadow-md"
-              >
-                <span className="text-[9px] font-mono tracking-wider text-[#C9A84C] uppercase block mb-1">
-                  DESTAQUE
-                </span>
-                <span className="text-xs font-serif text-[#FAF8F5] block font-medium">
-                  Par de Alianças
-                </span>
-                <span className="text-[11px] font-mono text-[#9A968E] mt-1 block">
-                  R$ 3.890
-                </span>
-              </motion.button>
-
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setActiveTab('workshop')}
-                className="p-4 bg-[#121216] border border-[#C9A84C]/30 rounded-2xl text-left hover:border-[#C9A84C] transition-all shadow-md"
-              >
-                <span className="text-[9px] font-mono tracking-wider text-[#C9A84C] uppercase block mb-1">
-                  OFICINA LOCAL
-                </span>
-                <span className="text-xs font-serif text-[#FAF8F5] block font-medium">
-                  Ateliê na Bancada
-                </span>
-                <span className="text-[11px] font-mono text-emerald-400 mt-1 block flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  Ativo Hoje
-                </span>
-              </motion.button>
-            </div>
-
-            {/* Ghost CTA Button */}
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setActiveTab('categories')}
-              className="w-full py-3.5 px-4 bg-transparent hover:bg-[#C9A84C]/10 text-[#FAF8F5] border border-[#C9A84C] text-xs font-mono tracking-[0.14em] uppercase transition-all rounded-full flex items-center justify-center gap-2"
-            >
-              <span>EXPLORAR TODAS AS CATEGORIAS</span>
-              <ArrowRight size={14} className="text-[#C9A84C]" />
-            </motion.button>
-
-            {/* Trust Mini Banner */}
-            <div className="p-3.5 bg-[#121216]/80 border border-white/10 rounded-2xl flex items-center justify-between text-[11px] font-mono text-[#9A968E]">
-              <span className="flex items-center gap-1.5">
-                <ShieldCheck size={14} className="text-[#C9A84C]" />
-                <span>Garantia Vitalícia do Ouro</span>
-              </span>
-              <span className="text-[#C9A84C]">Rua São Pedro, 650</span>
-            </div>
-          </motion.div>
+          <MobileLandingPage
+            onExploreCatalogue={() => setActiveTab('categories')}
+          />
         )}
 
         {/* =========================================================
@@ -298,105 +287,100 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
             transition={{ duration: 0.35 }}
             className="space-y-4 px-4 pt-4"
           >
-            <div className="flex items-center justify-between pb-2 border-b border-white/5">
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setActiveTab('categories')}
-                className="flex items-center gap-1 text-xs font-mono text-[#9A968E] hover:text-[#FAF8F5] py-1 px-2.5 rounded-full bg-white/5"
-              >
-                <ChevronLeft size={16} />
-                <span>Voltar</span>
-              </motion.button>
-              <span className="text-[10px] font-mono text-[#C9A84C] tracking-widest px-3 py-1 rounded-full bg-[#121216] border border-white/10">
-                {product.ref}
-              </span>
-            </div>
-
-            {/* Large Video / Photo Viewer */}
-            <div className="relative aspect-square w-full bg-[#121216] border border-[#C9A84C]/35 rounded-3xl overflow-hidden shadow-2xl">
-              {screen3PhotoIndex === 1 && (
-                <video
-                  src="/videos/forja-anel-fogo.mp4"
-                  poster="/videos/forja-anel-fogo.jpg"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full h-full object-cover filter brightness-95"
-                />
-              )}
-              {screen3PhotoIndex === 2 && (
-                <video
-                  src="/videos/hero-aliancas.mp4"
-                  poster="/videos/hero-aliancas.jpg"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full h-full object-cover filter brightness-95"
-                />
-              )}
-              {screen3PhotoIndex === 3 && (
-                <video
-                  src="/videos/alianca-estojo-noivos.mp4"
-                  poster="/videos/alianca-estojo-noivos.jpg"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full h-full object-cover filter brightness-95"
-                />
-              )}
-              {screen3PhotoIndex === 4 && (
-                <video
-                  src="/videos/ourives-bancada.mp4"
-                  poster="/videos/ourives-bancada.jpg"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full h-full object-cover filter brightness-95"
-                />
-              )}
-
-
-
-              {/* Navigation Dots */}
-              <div className="absolute bottom-3 left-0 right-0 flex items-center justify-center gap-1.5 z-10">
-                {[1, 2, 3, 4].map((idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setScreen3PhotoIndex(idx)}
-                    className={`h-1.5 rounded-full transition-all ${
-                      screen3PhotoIndex === idx ? 'w-5 bg-[#C9A84C]' : 'w-1.5 bg-white/30'
+            {/* Full-bleed product photography — the title block overlays it,
+                with the dark panel resuming right below the headline. */}
+            <div
+              className="relative -mx-4 -mt-4"
+              style={{ touchAction: 'pan-y' }}
+              onPointerDown={handleShotPointerDown}
+              onPointerUp={handleShotPointerUp}
+              onPointerCancel={handleShotPointerCancel}
+            >
+              <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#0A0A0C]">
+                {PRODUCT_SHOTS.map((shot, i) => (
+                  <img
+                    key={shot.src}
+                    src={shot.src}
+                    alt={shot.alt}
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+                      screen3PhotoIndex === i + 1 ? 'opacity-100' : 'opacity-0'
                     }`}
                   />
+                ))}
+
+                {/* Legibility scrim — top only, so the bottom of the photo stays clean */}
+                <div
+                  className="pointer-events-none absolute inset-x-0 top-0 h-[22%] bg-gradient-to-b from-[#0A0A0C]/70 to-transparent"
+                  aria-hidden="true"
+                />
+              </div>
+
+              {/* Product Meta — overlaid on the photography */}
+              <div className="absolute inset-x-0 bottom-0 z-10 space-y-1 px-4 pb-4">
+                {/* Navigation Dots */}
+                <div className="mb-2 flex items-center justify-center gap-1.5">
+                  {PRODUCT_SHOTS.map((shot, i) => (
+                    <button
+                      key={shot.src}
+                      onClick={() => setScreen3PhotoIndex(i + 1)}
+                      aria-label={`Ver ${shot.alt}`}
+                      className={`h-[3px] cursor-pointer rounded-full transition-all duration-300 ${
+                        screen3PhotoIndex === i + 1
+                          ? 'w-6 bg-[#C9A84C] shadow-[0_0_6px_rgba(0,0,0,0.9)]'
+                          : 'w-[3px] bg-white/60 shadow-[0_0_4px_rgba(0,0,0,0.9)] hover:bg-white/80'
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="rounded-full bg-[#0A0A0C]/70 px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider text-[#C9A84C] backdrop-blur-md">
+                    {product.category}
+                  </span>
+                </div>
+
+                <h3
+                  className="text-xl font-serif leading-tight text-[#FAF8F5]"
+                  style={{
+                    textShadow:
+                      '0 1px 2px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.95), 0 0 24px rgba(0,0,0,0.75)',
+                  }}
+                >
+                  {product.title}
+                </h3>
+              </div>
+            </div>
+
+            {/* Metal Selector — Ouro / Prata */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs font-mono text-[#FAF8F5]">
+                <span>Metal:</span>
+                <span className="text-[#C9A84C]">
+                  {selectedMetal === 'Ouro' ? 'Ouro 18k' : 'Prata 950'}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {(['Ouro', 'Prata'] as const).map((metal) => (
+                  <motion.button
+                    whileTap={{ scale: 0.97 }}
+                    key={metal}
+                    onClick={() => setSelectedMetal(metal)}
+                    aria-pressed={selectedMetal === metal}
+                    className={`h-10 rounded-full border text-xs font-mono tracking-wider uppercase transition-all ${
+                      selectedMetal === metal
+                        ? 'border-[#C9A84C] bg-gradient-to-r from-[#D4943E] to-[#C9A84C] text-[#0A0A0C] font-bold shadow-[0_0_12px_rgba(201,168,76,0.35)]'
+                        : 'border-white/10 text-[#9A968E] hover:text-[#FAF8F5]'
+                    }`}
+                  >
+                    {metal}
+                  </motion.button>
                 ))}
               </div>
             </div>
 
-            {/* Product Meta */}
-            <div className="space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono text-[#C9A84C] uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/5">
-                  {product.category}
-                </span>
-              </div>
-
-              <h3 className="text-xl font-serif text-[#FAF8F5] leading-tight">
-                {product.title}
-              </h3>
-
-              <div className="flex items-baseline gap-2 pt-1">
-                <span className="text-2xl font-mono text-[#C9A84C] font-semibold">
-                  {product.price}
-                </span>
-                <span className="text-xs font-mono text-[#9A968E]">o par em ouro 18k</span>
-              </div>
-            </div>
-
             {/* Ring Size Selector */}
-            <div className="space-y-2 pt-2 border-t border-white/5">
+            <div className="space-y-2 border-t border-white/5 pt-4">
               <div className="flex items-center justify-between text-xs font-mono text-[#FAF8F5]">
                 <span>Aro Desejado:</span>
                 <span className="text-[#C9A84C]">Tamanho {selectedRingSize}</span>
@@ -440,14 +424,14 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                 whileTap={{ scale: 0.98 }}
                 onClick={() =>
                   openWhatsApp(
-                    `Olá! Gostaria de encomendar o Par de Alianças Anatômicas Chanfradas (Ref: AL-18K-01), aro ${selectedRingSize}${
+                    `Olá! Gostaria de encomendar ${product.title} (${product.ref}), em ${selectedMetal}, aro ${selectedRingSize}${
                       engravingText ? ` com gravação: "${engravingText}"` : ''
                     }.`
                   )
                 }
                 className="w-full py-3.5 bg-gradient-to-r from-[#D4943E] to-[#C9A84C] hover:from-[#C9A84C] hover:to-[#D4943E] text-[#0A0A0C] font-mono text-xs font-bold tracking-wider uppercase rounded-full flex items-center justify-center gap-2 shadow-xl shadow-[#C9A84C]/20"
               >
-                <MessageCircle size={15} />
+                <WhatsAppGlyph size={14} />
                 <span>PEDIR ORÇAMENTO NO WHATSAPP</span>
               </motion.button>
             </div>
@@ -462,14 +446,20 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35 }}
-            className="space-y-6 px-4 pt-4"
+            className="flex flex-col gap-3 px-4 pt-3"
           >
-            <div className="border-b border-white/5 pb-3">
-              <h3 className="text-xl font-serif text-[#FAF8F5]">A Arte da Ourivesaria</h3>
+            <div className="flex items-baseline justify-between gap-3 border-b border-white/5 pb-2">
+              <h3 className="text-lg font-serif leading-tight text-[#FAF8F5]">
+                A Arte da Ourivesaria
+              </h3>
+              <span className="shrink-0 font-mono text-[9px] uppercase tracking-[0.12em] text-[#C9A84C]">
+                Oficina &amp; Ateliê
+              </span>
             </div>
 
-            {/* Workshop Master Goldsmith Video */}
-            <div className="relative aspect-[9/14] w-full bg-[#121216] border border-[#C9A84C]/35 rounded-3xl overflow-hidden shadow-2xl">
+            {/* Workshop Master Goldsmith Video — 16:9 so the master stays
+                present without pushing the details below the fold. */}
+            <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-[#C9A84C]/35 bg-[#121216] shadow-xl">
               <video
                 src="/videos/ourives-bancada.mp4"
                 poster="/videos/ourives-bancada.jpg"
@@ -477,45 +467,45 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-cover filter brightness-95"
+                className="h-full w-full object-cover object-center filter brightness-95"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0C] via-transparent to-[#0A0A0C]/40 pointer-events-none" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0A0A0C] via-[#0A0A0C]/10 to-transparent" />
 
-              <div className="absolute top-4 left-4 bg-[#121216]/90 border border-[#C9A84C]/30 px-3.5 py-1 text-[9px] font-mono text-[#C9A84C] uppercase tracking-wider backdrop-blur-md rounded-full shadow-lg">
+              <div className="absolute left-3 top-3 rounded-full border border-[#C9A84C]/30 bg-[#121216]/90 px-2.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-[#C9A84C] shadow-lg backdrop-blur-md">
                 MESTRE HIVO MARQUES
               </div>
 
-              <div className="absolute bottom-5 left-5 right-5 z-10 space-y-1">
-                <span className="text-sm font-serif text-[#FAF8F5] block font-medium">
+              <div className="absolute inset-x-3 bottom-2.5 z-10">
+                <span className="block font-serif text-[13px] font-medium leading-tight text-[#FAF8F5]">
                   Forja Manual do Lingote à Joia
                 </span>
               </div>
             </div>
 
-            {/* Address & Hours */}
-            <div className="p-4 bg-[#121216] border border-[#C9A84C]/25 rounded-2xl space-y-3 shadow-md">
-              <div className="flex items-start gap-3">
-                <MapPin size={16} className="text-[#C9A84C] shrink-0 mt-0.5" />
-                <div>
-                  <span className="text-xs font-serif text-[#FAF8F5] block font-medium">
+            {/* Address & Hours — one compact card, tighter type */}
+            <div className="space-y-2 rounded-2xl border border-[#C9A84C]/25 bg-[#121216] p-3.5 shadow-md">
+              <div className="flex items-start gap-2.5">
+                <MapPin size={14} className="mt-0.5 shrink-0 text-[#C9A84C]" />
+                <div className="min-w-0">
+                  <span className="block font-serif text-[11px] font-medium text-[#FAF8F5]">
                     Endereço da Boutique
                   </span>
-                  <p className="text-xs text-[#9A968E] mt-0.5 font-light">
+                  <p className="mt-0.5 text-[11px] font-light leading-snug text-[#9A968E]">
                     {BOUTIQUE_INFO.address}
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 pt-2.5 border-t border-white/5">
-                <Clock size={16} className="text-[#C9A84C] shrink-0 mt-0.5" />
-                <div>
-                  <span className="text-xs font-serif text-[#FAF8F5] block font-medium">
+              <div className="flex items-start gap-2.5 border-t border-white/5 pt-2">
+                <Clock size={14} className="mt-0.5 shrink-0 text-[#C9A84C]" />
+                <div className="min-w-0">
+                  <span className="block font-serif text-[11px] font-medium text-[#FAF8F5]">
                     Horário de Funcionamento
                   </span>
-                  <p className="text-[11px] font-mono text-[#9A968E] mt-0.5">
+                  <p className="mt-0.5 font-mono text-[10px] leading-snug text-[#9A968E]">
                     {BOUTIQUE_INFO.hoursWeekday}
                   </p>
-                  <p className="text-[11px] font-mono text-[#9A968E]">
+                  <p className="font-mono text-[10px] leading-snug text-[#9A968E]">
                     {BOUTIQUE_INFO.hoursSaturday}
                   </p>
                 </div>
@@ -531,17 +521,22 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-3.5 bg-gradient-to-r from-[#D4943E] to-[#C9A84C] hover:from-[#C9A84C] hover:to-[#D4943E] text-[#0A0A0C] font-mono text-xs font-bold tracking-wider uppercase rounded-full flex items-center justify-center gap-2 shadow-lg"
+              className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#D4943E] to-[#C9A84C] text-[11px] font-mono font-bold uppercase tracking-wider text-[#0A0A0C] shadow-lg transition-colors hover:from-[#C9A84C] hover:to-[#D4943E]"
             >
-              <MessageCircle size={15} />
+              <WhatsAppGlyph size={14} />
               <span>FALAR COM O OURIVES NO WHATSAPP</span>
             </motion.a>
           </motion.div>
         )}
       </main>
 
-      {/* 3. Fixed Bottom Tab Bar (Safe mobile navigation for all 4 screens) */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#0A0A0C]/95 backdrop-blur-md border-t border-[#C9A84C]/25 h-16 flex items-center justify-around px-2 shadow-2xl">
+      {/* 3. Bottom Tab Bar — in-flow on the landing (fixed viewport) and pinned
+             on the scrolling screens. */}
+      <nav
+        className={`safe-bottom z-40 flex h-16 shrink-0 items-center justify-around border-t border-[#C9A84C]/25 bg-[#0A0A0C]/95 px-2 backdrop-blur-md ${
+          activeTab === 'home' ? '' : 'fixed bottom-0 left-0 right-0 shadow-2xl'
+        }`}
+      >
         <button
           onClick={() => setActiveTab('home')}
           className={`flex flex-col items-center justify-center gap-1 text-[10px] font-mono tracking-wider transition-all ${
@@ -568,7 +563,7 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
             activeTab === 'product' ? 'text-[#C9A84C] font-bold scale-105' : 'text-[#9A968E]'
           }`}
         >
-          <Sparkles size={18} />
+          <InterlockingRings size={18} strokeWidth={1.4} />
           <span>ALIANÇAS</span>
         </button>
 
@@ -582,6 +577,7 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
           <span>OFICINA</span>
         </button>
       </nav>
+      </div>
     </div>
   );
 };

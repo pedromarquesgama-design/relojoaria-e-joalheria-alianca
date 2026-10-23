@@ -12,6 +12,26 @@
   --color-gold: #C9A84C;
   --color-gold-warm: #D4943E;
   --color-border-gold: rgba(201, 168, 76, 0.22);
+  --color-noir: #0B0B0B;
+  --color-gold-champagne: #D4AF37;
+  --color-gold-champagne-soft: #F0D98A;
+  --color-gold-champagne-deep: #B8912A;
+  --color-parchment: #B9B3A8;
+}
+
+/* App shell height: fills the viewport without ever scrolling.
+   `dvh` tracks the dynamic viewport (mobile browser chrome collapse). */
+.app-shell {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Safe-area aware padding for notched devices */
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 @layer base {

@@ -56,7 +56,7 @@ export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
             >
 
               {/* Center Macro Visual / Video */}
-              <div className="relative w-full aspect-[3/4] flex items-center justify-center overflow-hidden bg-[#0A0A0C]">
+              <div className="relative w-full aspect-[3/4] flex items-center justify-center overflow-hidden bg-[#0A0A0C] border-b border-[#C9A84C]/25">
                 {cat.video ? (
                   <video
                     src={cat.video}
