@@ -138,7 +138,7 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             href={`https://wa.me/${BOUTIQUE_INFO.whatsappRaw}?text=${encodeURIComponent(
-              'Olá! Gostaria de falar com o ourives da Relojoaria Aliança em Porto Seguro.'
+              'Olá! Gostaria de falar com a Relojoaria Aliança em Porto Seguro.'
             )}`}
             target="_blank"
             rel="noopener noreferrer"
