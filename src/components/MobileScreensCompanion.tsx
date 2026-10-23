@@ -111,7 +111,9 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
         className={
           activeTab === 'home'
             ? 'app-shell flex flex-col overflow-hidden'
-            : 'flex min-h-screen flex-col pb-16'
+            : activeTab === 'workshop'
+              ? 'app-shell flex flex-col overflow-hidden pb-[calc(4rem_+_env(safe-area-inset-bottom))]'
+              : 'flex min-h-screen flex-col pb-16'
         }
       >
       {/* 1. Mobile Fixed Top Header — hidden on the landing screen, which owns its own centered header */}
@@ -163,7 +165,9 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
         className={
           activeTab === 'home'
             ? 'flex min-h-0 flex-1 flex-col overflow-hidden'
-            : 'flex-1 pb-4'
+            : activeTab === 'workshop'
+              ? 'flex min-h-0 flex-1 flex-col overflow-y-auto'
+              : 'flex-1 pb-4'
         }
       >
         {/* =========================================================
@@ -446,7 +450,7 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35 }}
-            className="flex flex-col gap-3 px-4 pt-3"
+            className="flex min-h-0 flex-1 flex-col gap-3 px-4 pt-3"
           >
             <div className="flex items-baseline justify-between gap-3 border-b border-white/5 pb-2">
               <h3 className="text-lg font-serif leading-tight text-[#FAF8F5]">
@@ -457,9 +461,9 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
               </span>
             </div>
 
-            {/* Workshop Master Goldsmith Video — 16:9 so the master stays
-                present without pushing the details below the fold. */}
-            <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-[#C9A84C]/35 bg-[#121216] shadow-xl">
+            {/* Workshop Master Goldsmith Video — flexes to absorb the leftover
+                height, so the screen fills the viewport edge to edge. */}
+            <div className="relative min-h-[170px] w-full flex-1 overflow-hidden rounded-2xl border border-[#C9A84C]/35 bg-[#121216] shadow-xl">
               <video
                 src="/videos/ourives-bancada.mp4"
                 poster="/videos/ourives-bancada.jpg"
@@ -467,7 +471,7 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                 loop
                 muted
                 playsInline
-                className="h-full w-full object-cover object-center filter brightness-95"
+                className="absolute inset-0 h-full w-full object-cover object-center filter brightness-95"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0A0A0C] via-[#0A0A0C]/10 to-transparent" />
 
