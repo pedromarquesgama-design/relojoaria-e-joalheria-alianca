@@ -138,10 +138,10 @@ export const GoldJewelrySection: React.FC<GoldJewelrySectionProps> = ({
         </div>
 
         {/* Main 2-Column Experience */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Visual Showcase */}
           <div className="lg:col-span-6 flex flex-col space-y-4">
-            <div className="relative w-full aspect-[4/5] min-h-[440px] rounded-3xl overflow-hidden bg-[#121216] border border-[#C9A84C]/30 shadow-[0_20px_50px_rgba(0,0,0,0.85)] group">
+            <div className="relative w-full aspect-[4/4.6] max-h-[560px] rounded-3xl overflow-hidden bg-[#121216] border border-[#C9A84C]/30 shadow-[0_20px_50px_rgba(0,0,0,0.85)] group">
               {/* Photo Display with smooth transition */}
               <AnimatePresence mode="wait">
                 <motion.img
@@ -247,15 +247,15 @@ export const GoldJewelrySection: React.FC<GoldJewelrySectionProps> = ({
           </div>
 
           {/* Right Column: Customizer with exact requested options */}
-          <div className="lg:col-span-6 bg-[#121216] border border-[#C9A84C]/25 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-[0_15px_40px_rgba(0,0,0,0.7)]">
-            <div className="space-y-6">
+          <div className="lg:col-span-6 bg-[#121216] border border-[#C9A84C]/25 rounded-3xl p-6 sm:p-8 flex flex-col space-y-5 shadow-[0_15px_40px_rgba(0,0,0,0.7)]">
+            <div className="space-y-5">
               {/* Product Header */}
-              <div className="border-b border-white/10 pb-4">
+              <div className="border-b border-white/10 pb-3">
                 <div className="flex items-center justify-between text-xs font-mono text-[#9A968E] uppercase tracking-wider mb-1">
                   <span>Escolha do Cliente</span>
                   <span className="text-[#C9A84C]">Ateliê Porto Seguro</span>
                 </div>
-                <div className="flex items-baseline justify-between gap-4 mt-2">
+                <div className="flex items-baseline justify-between gap-4 mt-1">
                   <div>
                     <h3 className="text-2xl sm:text-3xl font-serif text-[#FAF8F5]">
                       Correntes em Ouro e Prata
@@ -268,11 +268,11 @@ export const GoldJewelrySection: React.FC<GoldJewelrySectionProps> = ({
               </div>
 
               {/* 1. Escolha da Peça: Corrente de Ouro, Corrente de Prata, Pulseira de Ouro, Pulseira de Prata */}
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <label className="text-xs font-mono text-[#FAF8F5] uppercase tracking-wider block">
                   1. Selecione a Peça:
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {JEWELRY_PIECE_OPTIONS.map((piece) => {
                     const isSelected = selectedPieceId === piece.id;
                     const isGold = piece.metal === 'Ouro 18k';
@@ -281,7 +281,7 @@ export const GoldJewelrySection: React.FC<GoldJewelrySectionProps> = ({
                         whileTap={{ scale: 0.98 }}
                         key={piece.id}
                         onClick={() => handleSelectPiece(piece.id)}
-                        className={`p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[92px] ${
+                        className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[82px] ${
                           isSelected
                             ? 'bg-[#C9A84C]/15 border-[#C9A84C] text-[#FAF8F5] shadow-[0_0_15px_rgba(201,168,76,0.25)]'
                             : 'bg-[#0A0A0C]/70 border-white/10 text-[#9A968E] hover:border-white/25 hover:text-[#FAF8F5]'
@@ -296,7 +296,7 @@ export const GoldJewelrySection: React.FC<GoldJewelrySectionProps> = ({
                             {piece.metal}
                           </span>
                         </div>
-                        <span className="block text-base font-serif font-medium mt-2 leading-tight">
+                        <span className="block text-base font-serif font-medium mt-1.5 leading-tight">
                           {piece.name}
                         </span>
                       </motion.button>
@@ -306,14 +306,14 @@ export const GoldJewelrySection: React.FC<GoldJewelrySectionProps> = ({
               </div>
 
               {/* 2. Pingente: Com pingente ou Sem pingente */}
-              <div className="space-y-3 border-t border-white/5 pt-5">
+              <div className="space-y-2.5 border-t border-white/5 pt-4">
                 <div className="flex items-center justify-between text-xs font-mono text-[#FAF8F5]">
                   <span className="uppercase tracking-wider">2. Pingente:</span>
                   <span className="text-[#C9A84C]">
                     {selectedPendant === 'com-pingente' ? 'Com pingente' : 'Sem pingente'}
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2.5">
                   {PENDANT_OPTIONS.map((opt) => {
                     const isSelected = selectedPendant === opt.id;
                     return (
@@ -321,7 +321,7 @@ export const GoldJewelrySection: React.FC<GoldJewelrySectionProps> = ({
                         whileTap={{ scale: 0.98 }}
                         key={opt.id}
                         onClick={() => handleSelectPendant(opt.id as 'sem-pingente' | 'com-pingente')}
-                        className={`py-3.5 px-4 rounded-2xl border text-center transition-all cursor-pointer font-mono text-xs uppercase tracking-wider ${
+                        className={`py-3 px-4 rounded-2xl border text-center transition-all cursor-pointer font-mono text-xs uppercase tracking-wider ${
                           isSelected
                             ? 'bg-[#C9A84C] border-[#C9A84C] text-[#0A0A0C] font-bold shadow-[0_0_12px_rgba(201,168,76,0.35)]'
                             : 'bg-[#0A0A0C]/70 border-white/10 text-[#9A968E] hover:border-white/25 hover:text-[#FAF8F5]'
@@ -335,8 +335,8 @@ export const GoldJewelrySection: React.FC<GoldJewelrySectionProps> = ({
               </div>
             </div>
 
-            {/* CTAs and Security Strip */}
-            <div className="mt-8 pt-5 border-t border-white/10 space-y-3">
+            {/* CTAs and Security Strip — now sitting tight and close beneath options */}
+            <div className="pt-4 border-t border-white/10 space-y-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <motion.button
                   whileHover={{ scale: 1.02 }}

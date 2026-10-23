@@ -439,8 +439,26 @@ export const ProductCardGraphic: React.FC<{
   type: string;
   className?: string;
   imageUrl?: string;
+  video?: string;
+  poster?: string;
   alt?: string;
-}> = ({ type, className = '', imageUrl, alt }) => {
+}> = ({ type, className = '', imageUrl, video, poster, alt }) => {
+  if (video) {
+    return (
+      <div className={`relative w-full h-full min-h-[220px] flex items-center justify-center overflow-hidden ${className}`}>
+        <video
+          src={video}
+          poster={poster}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover object-center filter brightness-95"
+        />
+      </div>
+    );
+  }
+
   if (imageUrl) {
     return (
       <div className={`relative w-full h-full min-h-[220px] flex items-center justify-center overflow-hidden ${className}`}>

@@ -28,6 +28,8 @@ export interface Product {
   statusText: string;
   imageType: 'aliancas-18k' | 'cronografo-gold' | 'solitario-diamante' | 'corrente-grumet' | 'oculos-titanium' | 'anel-aparador' | string;
   imageUrl?: string;
+  video?: string;
+  poster?: string;
   shortDescription: string;
   specs: ProductSpecification;
   history: string;

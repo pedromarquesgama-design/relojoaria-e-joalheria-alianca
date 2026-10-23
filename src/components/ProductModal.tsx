@@ -87,6 +87,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({
               <ProductCardGraphic
                 type={product.imageType}
                 imageUrl={activePhoto}
+                video={product.video}
+                poster={product.poster}
                 alt={product.title}
                 className="h-full"
               />

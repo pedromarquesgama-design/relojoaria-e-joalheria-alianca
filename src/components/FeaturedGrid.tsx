@@ -50,15 +50,27 @@ export const FeaturedGrid: React.FC<FeaturedGridProps> = ({
                 className="group relative bg-[#121216] border border-[#C9A84C]/25 hover:border-[#C9A84C]/80 transition-all duration-300 rounded-2xl overflow-hidden flex flex-col justify-between shadow-[0_12px_35px_rgba(0,0,0,0.85)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.95),0_0_25px_rgba(201,168,76,0.18)] cursor-pointer"
               >
                 {/* Center Visual Area */}
-                <div className="relative w-full aspect-square flex items-center justify-center p-6 bg-[#0A0A0C]/80 overflow-hidden">
-                  <div className="w-full h-full flex items-center justify-center group-hover:scale-108 transition-transform duration-700">
-                    <ProductCardGraphic
-                      type={product.imageType}
-                      imageUrl={product.imageUrl}
-                      alt={product.title}
-                      className="max-h-full"
+                <div className={`relative w-full aspect-square flex items-center justify-center overflow-hidden bg-[#0A0A0C]/80 ${product.video ? '' : 'p-6'}`}>
+                  {product.video ? (
+                    <video
+                      src={product.video}
+                      poster={product.poster}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover object-center filter brightness-95 group-hover:brightness-105 group-hover:scale-110 transition-all duration-700 pointer-events-none"
                     />
-                  </div>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center group-hover:scale-108 transition-transform duration-700">
+                      <ProductCardGraphic
+                        type={product.imageType}
+                        imageUrl={product.imageUrl}
+                        alt={product.title}
+                        className="max-h-full"
+                      />
+                    </div>
+                  )}
                   {/* Subtle dark vignette */}
                   <div className="absolute inset-0 bg-radial-gradient from-transparent to-[#121216]/60 pointer-events-none" />
                 </div>
@@ -77,16 +89,11 @@ export const FeaturedGrid: React.FC<FeaturedGridProps> = ({
                     </h3>
                   </div>
 
-                  {/* Price & Action Button */}
+                  {/* Action Link & Button without prices */}
                   <div className="pt-3 border-t border-white/5 flex items-center justify-between mt-auto">
-                    <div>
-                      <span className="text-[10px] font-mono text-[#9A968E] uppercase block">
-                        Valor Unitário
-                      </span>
-                      <span className="text-xl font-mono text-[#FAF8F5] font-light">
-                        {product.price}
-                      </span>
-                    </div>
+                    <span className="text-xs font-mono tracking-[0.14em] text-[#C9A84C] uppercase font-medium group-hover:text-[#FAF8F5] transition-colors">
+                      Ver Detalhes
+                    </span>
 
                     <motion.div
                       whileHover={{ scale: 1.15 }}
