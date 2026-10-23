@@ -217,7 +217,7 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                   poster: '/videos/relojoaria-cronografo.jpg',
                   action: () =>
                     openWhatsApp(
-                      'Olá! Gostaria de consultar a disponibilidade de relógios automáticos na loja.'
+                      'Olá! Gostaria de consultar a disponibilidade de relógios na loja.'
                     ),
                 },
                 {
