@@ -434,8 +434,8 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                 whileTap={{ scale: 0.98 }}
                 onClick={() =>
                   openWhatsApp(
-                    `Olá! Gostaria de encomendar ${product.title} (${product.ref}), em ${selectedMetal}, aro ${selectedRingSize}${
-                      engravingText ? ` com gravação: "${engravingText}"` : ''
+                    `Olá! Vim pelo site e gostaria de encomendar pares de alianças em ${selectedMetal}, aro ${selectedRingSize}${
+                      engravingText ? `, com gravação "${engravingText}"` : ''
                     }.`
                   )
                 }
