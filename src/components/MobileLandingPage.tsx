@@ -43,7 +43,7 @@ const SLIDES: Slide[] = [
     headlineLines: ['ALIANÇAS', 'PERSONALIZADAS EM', 'OURO E PRATA'],
     ctaLabel: 'Conhecer o ateliê',
     ctaMessage:
-      'Olá! Gostaria de agendar uma visita ao ateliê do mestre Hivo Marques para conhecer a forja de perto.',
+      'Olá! Gostaria de agendar uma visita ao ateliê para saber sobre demais serviços.',
   },
   {
     id: 'heirlooms',
