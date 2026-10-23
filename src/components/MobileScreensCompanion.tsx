@@ -119,10 +119,10 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
       {/* 1. Mobile Fixed Top Header — hidden on the landing screen, which owns its own centered header */}
       {activeTab !== 'home' && (
       <header
-        className={`z-40 h-16 border-b border-[#C9A84C]/25 px-4 ${
+        className={`z-40 h-16 px-4 ${
           activeTab === 'workshop'
             ? 'absolute inset-x-0 top-0 bg-transparent'
-            : 'sticky top-0 bg-[#0A0A0C]/90 backdrop-blur-md'
+            : 'sticky top-0 border-b border-[#C9A84C]/25 bg-[#0A0A0C]/90 backdrop-blur-md'
         } flex items-center justify-between`}
       >
         <motion.div
