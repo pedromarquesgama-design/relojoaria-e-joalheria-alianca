@@ -532,7 +532,7 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 href={`https://wa.me/${BOUTIQUE_INFO.whatsappRaw}?text=${encodeURIComponent(
-                  'Olá, mestre ourives Hivo Marques! Gostaria de agendar uma visita na oficina para provar alianças.'
+                  'Olá, mestre Hivo! Gostaria de agendar uma visita na oficina.'
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
