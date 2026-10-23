@@ -480,7 +480,7 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
             />
 
             {/* Overlaid content */}
-            <div className="relative z-10 flex h-full min-h-0 flex-col px-4 pt-[76px] pb-1">
+            <div className="relative z-10 flex h-full min-h-0 flex-col px-4 pt-[56px] pb-1">
               <div>
                 <span className="rounded-full border border-[#C9A84C]/40 bg-[#0A0A0C]/70 px-2.5 py-0.5 font-mono text-[8px] uppercase tracking-wider text-[#C9A84C] shadow-lg backdrop-blur-md">
                   MESTRE HIVO MARQUES
