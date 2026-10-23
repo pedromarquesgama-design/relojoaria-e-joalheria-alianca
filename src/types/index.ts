@@ -4,6 +4,9 @@ export interface ProductSpecification {
   material: string;
   acabamento: string;
   largura?: string;
+  fecho?: string;
+  comprimento?: string;
+  pesoMedio?: string;
   pedraCentral?: string;
   quilates?: string;
   calibre?: string;
@@ -23,7 +26,8 @@ export interface Product {
   rawPrice: number;
   status: ProductStatus;
   statusText: string;
-  imageType: 'aliancas-18k' | 'cronografo-gold' | 'solitario-diamante' | 'corrente-grumet' | 'oculos-titanium' | 'anel-aparador';
+  imageType: 'aliancas-18k' | 'cronografo-gold' | 'solitario-diamante' | 'corrente-grumet' | 'oculos-titanium' | 'anel-aparador' | string;
+  imageUrl?: string;
   shortDescription: string;
   specs: ProductSpecification;
   history: string;
@@ -45,5 +49,7 @@ export interface CartItem {
   product: Product;
   quantity: number;
   ringSize?: string;
+  chainLength?: string;
   engravingText?: string;
 }
+

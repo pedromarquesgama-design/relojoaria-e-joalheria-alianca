@@ -132,7 +132,7 @@ export const Header: React.FC<HeaderProps> = ({
                 }}
                 className="text-left text-[#FAF8F5] hover:text-[#C9A84C] py-1 border-b border-white/5"
               >
-                JÓIAS EM OURO
+                JÓIAS EM OURO 18K (CORRENTES & PINGENTES)
               </button>
               <button
                 onClick={() => {

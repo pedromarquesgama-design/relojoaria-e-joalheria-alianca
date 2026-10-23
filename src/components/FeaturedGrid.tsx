@@ -52,7 +52,12 @@ export const FeaturedGrid: React.FC<FeaturedGridProps> = ({
                 {/* Center Visual Area */}
                 <div className="relative w-full aspect-square flex items-center justify-center p-6 bg-[#0A0A0C]/80 overflow-hidden">
                   <div className="w-full h-full flex items-center justify-center group-hover:scale-108 transition-transform duration-700">
-                    <ProductCardGraphic type={product.imageType} className="max-h-full" />
+                    <ProductCardGraphic
+                      type={product.imageType}
+                      imageUrl={product.imageUrl}
+                      alt={product.title}
+                      className="max-h-full"
+                    />
                   </div>
                   {/* Subtle dark vignette */}
                   <div className="absolute inset-0 bg-radial-gradient from-transparent to-[#121216]/60 pointer-events-none" />

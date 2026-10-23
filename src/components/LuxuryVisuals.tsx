@@ -435,7 +435,24 @@ export const CategoryGraphic: React.FC<{ type: 'relogios' | 'joias' | 'aliancas'
   );
 };
 
-export const ProductCardGraphic: React.FC<{ type: string; className?: string }> = ({ type, className = '' }) => {
+export const ProductCardGraphic: React.FC<{
+  type: string;
+  className?: string;
+  imageUrl?: string;
+  alt?: string;
+}> = ({ type, className = '', imageUrl, alt }) => {
+  if (imageUrl) {
+    return (
+      <div className={`relative w-full h-full min-h-[220px] flex items-center justify-center overflow-hidden ${className}`}>
+        <img
+          src={imageUrl}
+          alt={alt || type}
+          className="w-full h-full object-cover object-center filter brightness-95"
+        />
+      </div>
+    );
+  }
+
   switch (type) {
     case 'aliancas-18k':
       return <CategoryGraphic type="aliancas" className={className} />;

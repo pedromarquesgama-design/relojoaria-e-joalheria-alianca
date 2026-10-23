@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Product } from '../types';
 import { ProductCardGraphic } from './LuxuryVisuals';
-import { BOUTIQUE_INFO } from '../data/mockData';
+import { BOUTIQUE_INFO, WEDDING_RING_SHOTS } from '../data/mockData';
 import { X, MessageCircle, ShoppingBag, ShieldCheck, Check, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface ProductModalProps {
   product: Product | null;
   onClose: () => void;
-  onAddToCart: (product: Product, ringSize?: string, engravingText?: string) => void;
+  onAddToCart: (product: Product, ringSize?: string, engravingText?: string, chainLength?: string) => void;
 }
 
 export const ProductModal: React.FC<ProductModalProps> = ({
@@ -18,12 +18,17 @@ export const ProductModal: React.FC<ProductModalProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<'specs' | 'history'>('specs');
   const [selectedSize, setSelectedSize] = useState<string>('20');
+  const [selectedChainLength, setSelectedChainLength] = useState<string>('60cm');
   const [engraving, setEngraving] = useState<string>('');
   const [added, setAdded] = useState<boolean>(false);
+  const [selectedRingShot, setSelectedRingShot] = useState<string | null>(null);
 
   if (!product) return null;
 
-  const isRing = product.category.includes('ALIANÇAS') || product.category.includes('JOALHERIA');
+  const isChain = product.category.includes('CORRENTES') || product.title.toLowerCase().includes('corrente');
+  const isRing = !isChain && (product.category.includes('ALIANÇAS') || product.title.toLowerCase().includes('anel') || product.title.toLowerCase().includes('solitário'));
+
+  const activePhoto = selectedRingShot || product.imageUrl;
 
   const handleWhatsAppInquiry = () => {
     const text = encodeURIComponent(
@@ -33,6 +38,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({
       `Ref: ${product.ref}\n` +
       `Valor: ${product.price}\n` +
       (isRing ? `Aro sugerido: ${selectedSize}\n` : '') +
+      (isChain ? `Comprimento da corrente: ${selectedChainLength}\n` : '') +
       (engraving ? `Gravação pretendida: "${engraving}"\n` : '') +
       `\nPoderiam me enviar mais fotos/detalhes e opções de pagamento? Obrigado!`
     );
@@ -40,7 +46,12 @@ export const ProductModal: React.FC<ProductModalProps> = ({
   };
 
   const handleAdd = () => {
-    onAddToCart(product, isRing ? selectedSize : undefined, engraving || undefined);
+    onAddToCart(
+      product,
+      isRing ? selectedSize : undefined,
+      engraving || undefined,
+      isChain ? selectedChainLength : undefined
+    );
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
@@ -71,9 +82,14 @@ export const ProductModal: React.FC<ProductModalProps> = ({
           </motion.button>
 
           {/* Left Column: Visual Showcase */}
-          <div className="w-full md:w-1/2 bg-[#0A0A0C] border-b md:border-b-0 md:border-r border-[#C9A84C]/20 flex flex-col p-4 md:p-6 justify-center">
-            <div className="relative flex-1 min-h-[260px] md:min-h-[420px] rounded-2xl bg-[#121216]/60 border border-white/5 flex items-center justify-center p-6 overflow-hidden">
-              <ProductCardGraphic type={product.imageType} className="h-full" />
+          <div className="w-full md:w-1/2 bg-[#0A0A0C] border-b md:border-b-0 md:border-r border-[#C9A84C]/20 flex flex-col p-4 md:p-6 justify-between">
+            <div className="relative flex-1 min-h-[260px] md:min-h-[380px] rounded-2xl bg-[#121216]/60 border border-white/5 flex items-center justify-center p-4 overflow-hidden">
+              <ProductCardGraphic
+                type={product.imageType}
+                imageUrl={activePhoto}
+                alt={product.title}
+                className="h-full"
+              />
               <div className="absolute top-4 left-4 flex items-center gap-2">
                 <span className="text-[10px] font-mono tracking-[0.14em] uppercase px-3 py-1 bg-[#121216]/90 backdrop-blur-md border border-[#C9A84C]/35 text-[#C9A84C] rounded-full shadow-lg">
                   {product.categoryTag}
@@ -84,6 +100,30 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                 <span className="text-[#C9A84C]">FOTOGRAFIA MACRO ATELIÊ</span>
               </div>
             </div>
+
+            {/* If Ring, show gallery thumbnail selector */}
+            {isRing && (
+              <div className="mt-3 pt-3 border-t border-white/10 flex items-center gap-2 overflow-x-auto pb-1">
+                {WEDDING_RING_SHOTS.map((shot) => {
+                  const isCurrent = activePhoto === shot.src;
+                  return (
+                    <button
+                      key={shot.src}
+                      type="button"
+                      onClick={() => setSelectedRingShot(shot.src)}
+                      className={`relative w-12 h-12 rounded-lg overflow-hidden border shrink-0 transition-all cursor-pointer ${
+                        isCurrent
+                          ? 'border-[#C9A84C] ring-2 ring-[#C9A84C]/60 shadow-[0_0_10px_rgba(201,168,76,0.35)]'
+                          : 'border-white/10 opacity-70 hover:opacity-100 hover:border-white/30'
+                      }`}
+                      title={shot.title}
+                    >
+                      <img src={shot.src} alt={shot.alt} className="w-full h-full object-cover" />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Right Column: Details & Actions */}
@@ -135,6 +175,41 @@ export const ProductModal: React.FC<ProductModalProps> = ({
                       }`}
                     >
                       Aro {size}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Chain Length Option if Applicable */}
+            {isChain && (
+              <div className="mb-4 p-4 bg-[#17171E]/90 border border-white/10 rounded-2xl">
+                <div className="flex items-center justify-between mb-2.5">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#FAF8F5]">
+                    Comprimento da Corrente
+                  </label>
+                  <span className="text-[11px] text-[#C9A84C]">Ajuste no ateliê</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { val: '45cm', lbl: '45 cm' },
+                    { val: '50cm', lbl: '50 cm' },
+                    { val: '60cm', lbl: '60 cm' },
+                    { val: '70cm', lbl: '70 cm' },
+                  ].map((len) => (
+                    <motion.button
+                      whileHover={{ scale: 1.08 }}
+                      whileTap={{ scale: 0.95 }}
+                      key={len.val}
+                      type="button"
+                      onClick={() => setSelectedChainLength(len.val)}
+                      className={`px-3.5 py-1 text-xs font-mono rounded-full transition-all border ${
+                        selectedChainLength === len.val
+                          ? 'bg-[#C9A84C] text-[#0A0A0C] border-[#C9A84C] font-semibold shadow-[0_0_12px_rgba(201,168,76,0.4)]'
+                          : 'bg-[#121216] text-[#FAF8F5] border-white/10 hover:border-[#C9A84C]/50'
+                      }`}
+                    >
+                      {len.lbl}
                     </motion.button>
                   ))}
                 </div>

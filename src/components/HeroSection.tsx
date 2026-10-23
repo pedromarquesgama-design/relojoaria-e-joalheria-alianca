@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Sparkles, Volume2, VolumeX, ShieldCheck, MessageCircle } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 
 interface HeroSectionProps {
-  onExploreClick: () => void;
+  onExploreClick?: (sectionId?: string) => void;
   onCustomQuoteClick: () => void;
 }
 
@@ -19,6 +19,21 @@ const SLIDES = [
     poster: '/videos/hero-aliancas.jpg',
     badge: 'FORJA EM OURO 18K 750',
     meta: 'Par Anatômico Chanfrado · Acabamento Rústico & Polido',
+    ctaText: 'VER ALIANÇAS E RELÓGIOS',
+    targetSection: 'pecas-destaque',
+  },
+  {
+    eyebrow: 'CONFECÇÃO PRÓPRIA & SOB MEDIDA',
+    headline: 'FABRICAÇÃO DE CORDÕES EM OURO E PRATA.',
+    subtitle:
+      'Correntes maciças e elos forjados artesanalmente em ouro 18k 750 e prata legítima. Malhas Grumet, Piastrine e fechos de alta segurança confeccionados sob medida no nosso ateliê.',
+    tag: 'CORDÕES & PULSEIRAS',
+    video: '/videos/animate_this_image_1080p_20261023180448.mp4',
+    poster: '/videos/animate_this_image_1080p_20261023180448.jpg',
+    badge: 'OURO 18K 750 & PRATA LEGÍTIMA',
+    meta: 'Malhas Grumet e Piastrine · Elos Maciços · Fechos de Gaveta Duplo',
+    ctaText: 'VER CORDÕES E JOIAS',
+    targetSection: 'joias',
   },
   {
     eyebrow: 'BANCADA LOCAL & PEÇAS EXCLUSIVAS',
@@ -30,6 +45,8 @@ const SLIDES = [
     poster: '/videos/forja-anel-fogo.jpg',
     badge: 'CHAMA ATIVA A 1064°C',
     meta: 'Solda de Alta Temperatura · Zero Emendas Frágeis',
+    ctaText: 'VER ALIANÇAS E RELÓGIOS',
+    targetSection: 'pecas-destaque',
   },
   {
     eyebrow: 'ALTA RELOJOARIA & REVISÃO MECÂNICA',
@@ -41,6 +58,8 @@ const SLIDES = [
     poster: '/videos/relojoaria-cronografo.jpg',
     badge: 'CALIBRE 28.800 VPH',
     meta: 'Aço 316L & Ouro 18K · Cristal de Safira Antirreflexo',
+    ctaText: 'VER ALIANÇAS E RELÓGIOS',
+    targetSection: 'pecas-destaque',
   },
   {
     eyebrow: 'REFORMA DE OURO & RESTAURAÇÃO',
@@ -52,6 +71,8 @@ const SLIDES = [
     poster: '/videos/ourives-bancada.jpg',
     badge: 'MESTRE OURIVES NA BANCADA',
     meta: 'Atendimento Direto na Rua São Pedro, 650',
+    ctaText: 'VER ALIANÇAS E RELÓGIOS',
+    targetSection: 'pecas-destaque',
   },
 ];
 
@@ -61,11 +82,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev < SLIDES.length - 1 ? prev + 1 : 0));
+    }, 6500);
+    return () => clearInterval(timer);
+  }, [isPaused, activeSlide]);
 
   const slide = SLIDES[activeSlide];
 
   return (
-    <section className="relative w-full bg-[#0A0A0C] border-b border-[#C9A84C]/20 overflow-hidden py-8 sm:py-12 md:py-20">
+    <section 
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      className="relative w-full bg-[#0A0A0C] border-b border-[#C9A84C]/20 overflow-hidden py-8 sm:py-12 md:py-20"
+    >
       {/* Dynamic Ambient Glowing Orbs */}
       <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-[#C9A84C]/10 rounded-full blur-[140px] pointer-events-none animate-pulse-glow" />
       <div className="absolute bottom-10 right-10 w-[450px] h-[450px] bg-[#D4943E]/10 rounded-full blur-[130px] pointer-events-none animate-float-slow" />
@@ -127,10 +161,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={onExploreClick}
+                  onClick={() => onExploreClick?.(slide.targetSection || 'pecas-destaque')}
                   className="px-7 py-4 bg-gradient-to-r from-[#C9A84C] to-[#D4943E] hover:from-[#D4943E] hover:to-[#C9A84C] text-[#0A0A0C] font-semibold text-xs font-mono tracking-[0.14em] uppercase transition-all rounded-full flex items-center justify-center gap-2.5 shadow-[0_8px_25px_rgba(201,168,76,0.3)] hover:shadow-[0_12px_30px_rgba(201,168,76,0.45)] cursor-pointer"
                 >
-                  <span>VER ALIANÇAS E RELÓGIOS</span>
+                  <span>{slide.ctaText || 'VER ALIANÇAS E RELÓGIOS'}</span>
                   <ArrowRight size={15} className="text-[#0A0A0C]" />
                 </motion.button>
 
@@ -146,7 +180,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               </div>
             </div>
 
-            {/* Slide Indicator at bottom-left: 01 ————— 04 with Soft Rounded Pill Design */}
+            {/* Slide Indicator at bottom-left: 01 ————— 05 with Soft Rounded Pill Design */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -155,7 +189,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               className="flex items-center gap-4 pt-4 border-t border-white/10"
             >
               <span className="text-xs font-mono font-medium text-[#FAF8F5]">
-                {`0${activeSlide + 1}`}
+                {String(activeSlide + 1).padStart(2, '0')}
               </span>
 
               {/* Interactive Rounded Progress Line Segments */}
@@ -174,7 +208,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 ))}
               </div>
 
-              <span className="text-xs font-mono text-[#9A968E]">04</span>
+              <span className="text-xs font-mono text-[#9A968E]">
+                {String(SLIDES.length).padStart(2, '0')}
+              </span>
 
               <div className="flex items-center gap-2 ml-auto">
                 <button

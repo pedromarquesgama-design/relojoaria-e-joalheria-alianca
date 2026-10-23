@@ -1,5 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { BOUTIQUE_INFO, FEATURED_PRODUCTS } from '../data/mockData';
+import {
+  BOUTIQUE_INFO,
+  FEATURED_PRODUCTS,
+  JEWELRY_PIECE_OPTIONS,
+  PENDANT_OPTIONS,
+  JEWELRY_GALLERY_IMAGES,
+  WEDDING_RING_SHOTS,
+  JewelryPieceOption,
+} from '../data/mockData';
 import { BrandLogo } from './BrandLogo';
 import { MobileLandingPage } from './MobileLandingPage';
 import { InterlockingRings, WhatsAppGlyph } from './HouseIcons';
@@ -9,41 +17,17 @@ import {
   Check,
   Wrench,
   MapPin,
-  Clock
+  Clock,
+  Sparkles,
+  ArrowLeft
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 /**
  * Product photography shown in the "Alianças" screen carousel.
- * Images are shipped as WebP with the white studio background keyed out,
- * so they sit directly on the dark page.
+ * Sourced from WEDDING_RING_SHOTS including the newly added ruby ring.
  */
-const PRODUCT_SHOTS = [
-  {
-    src: '/products/conjunto-dourado.webp',
-    alt: 'Par de alianças e anel de diamante em ouro 18k sobre veludo vermelho',
-  },
-  {
-    src: '/products/anel-diamante.webp',
-    alt: 'Anel de diamante solitário em caixa de veludo vermelho',
-  },
-  {
-    src: '/products/brincos-dourados-estojo.webp',
-    alt: 'Par de alianças douradas em estojo de veludo vermelho',
-  },
-  {
-    src: '/products/brincos-dourados-caixa.webp',
-    alt: 'Par de alianças douradas em caixa de veludo vermelho',
-  },
-  {
-    src: '/products/conjunto-prateado.webp',
-    alt: 'Conjunto de alianças prateadas com anel de diamante em veludo vermelho',
-  },
-  {
-    src: '/products/brincos-prateados-estojo.webp',
-    alt: 'Par de alianças prateadas em estojo de veludo vermelho',
-  },
-];
+const PRODUCT_SHOTS = WEDDING_RING_SHOTS;
 
 interface MobileScreensCompanionProps {
   onOpenProductModal?: (prod: any) => void;
@@ -52,12 +36,66 @@ interface MobileScreensCompanionProps {
 export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
   onOpenProductModal,
 }) => {
-  const [activeTab, setActiveTab] = useState<'home' | 'categories' | 'product' | 'workshop'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'categories' | 'product' | 'jewelry' | 'workshop'>('home');
   const [screen3PhotoIndex, setScreen3PhotoIndex] = useState(1);
   const [selectedRingSize, setSelectedRingSize] = useState('18');
   const [selectedMetal, setSelectedMetal] = useState<'Ouro' | 'Prata'>('Ouro');
   const [engravingText, setEngravingText] = useState('');
   const [actionFeedback, setActionFeedback] = useState<string | null>(null);
+
+  // Simplified Mobile Jewelry State (Corrente Ouro, Corrente Prata, Pulseira Ouro, Pulseira Prata + Pingente)
+  const [mobilePieceId, setMobilePieceId] = useState<JewelryPieceOption['id']>('corrente-ouro');
+  const [mobilePendant, setMobilePendant] = useState<'sem-pingente' | 'com-pingente'>('sem-pingente');
+  const [jewelryPhotoIndex, setJewelryPhotoIndex] = useState(0);
+  const jewelryGesture = useRef<{ x: number; y: number } | null>(null);
+
+  const handleJewelryPointerDown = (e: React.PointerEvent) => {
+    jewelryGesture.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleJewelryPointerUp = (e: React.PointerEvent) => {
+    const start = jewelryGesture.current;
+    jewelryGesture.current = null;
+    if (!start) return;
+
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+
+    if (Math.abs(dx) < 40 || Math.abs(dx) <= Math.abs(dy)) return;
+
+    const total = JEWELRY_GALLERY_IMAGES.length;
+    setJewelryPhotoIndex((curr) =>
+      dx < 0 ? (curr + 1) % total : (curr - 1 + total) % total
+    );
+  };
+
+  const handleJewelryPointerCancel = () => {
+    jewelryGesture.current = null;
+  };
+
+  const handleMobileSelectPiece = (pieceId: JewelryPieceOption['id']) => {
+    setMobilePieceId(pieceId);
+    if (pieceId === 'pulseira-ouro' || pieceId === 'pulseira-prata') {
+      setJewelryPhotoIndex(1); // pulseira no estojo
+    } else if (mobilePendant === 'com-pingente') {
+      setJewelryPhotoIndex(2); // corrente com plaquinha
+    } else {
+      setJewelryPhotoIndex(0); // corrente no estojo
+    }
+  };
+
+  const handleMobileSelectPendant = (opt: 'sem-pingente' | 'com-pingente') => {
+    setMobilePendant(opt);
+    if (opt === 'com-pingente') {
+      setJewelryPhotoIndex(2); // corrente com plaquinha
+    } else if (mobilePieceId.includes('pulseira')) {
+      setJewelryPhotoIndex(1);
+    } else {
+      setJewelryPhotoIndex(0);
+    }
+  };
+
+  const selectedMobilePiece = JEWELRY_PIECE_OPTIONS.find((p) => p.id === mobilePieceId) || JEWELRY_PIECE_OPTIONS[0];
 
   const product = FEATURED_PRODUCTS[0]; // Pares de Alianças em Ouro e Prata
 
@@ -182,6 +220,7 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
         {activeTab === 'home' && (
           <MobileLandingPage
             onExploreCatalogue={() => setActiveTab('categories')}
+            onNavigateTab={(tab) => setActiveTab(tab)}
           />
         )}
 
@@ -210,6 +249,22 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                   action: () => setActiveTab('product'),
                 },
                 {
+                  title: 'JÓIAS EM OURO',
+                  sub: 'Correntes grumet e pingentes maciços',
+                  tag: 'OURO 18K 750',
+                  video: '/videos/joias-corrente-ouro.mp4',
+                  poster: '/videos/joias-corrente-ouro.jpg',
+                  action: () => setActiveTab('jewelry'),
+                },
+                {
+                  title: 'OFICINA & ATELIER',
+                  sub: 'Bancada e manutenção na hora',
+                  tag: 'MESTRE HIVO MARQUES',
+                  video: '/videos/ourives-bancada.mp4',
+                  poster: '/videos/ourives-bancada.jpg',
+                  action: () => setActiveTab('workshop'),
+                },
+                {
                   title: 'RELÓGIOS',
                   sub: 'Cronógrafos e automáticos suíços',
                   tag: 'HAUTE HORLOGERIE',
@@ -221,17 +276,6 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                     ),
                 },
                 {
-                  title: 'JÓIAS EM OURO',
-                  sub: 'Correntes grumet e pingentes maciços',
-                  tag: 'OURO 18K 750',
-                  video: '/videos/joias-corrente-ouro.mp4',
-                  poster: '/videos/joias-corrente-ouro.jpg',
-                  action: () =>
-                    openWhatsApp(
-                      'Olá! Gostaria de ver opções de correntes grumet em ouro 18k.'
-                    ),
-                },
-                {
                   title: 'ÓCULOS',
                   sub: 'Armações nobres & proteção UV400',
                   tag: 'LUXURY EYEWEAR',
@@ -239,14 +283,6 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                   poster: '/videos/oculos-solar.jpg',
                   action: () =>
                     openWhatsApp('Olá! Gostaria de conhecer a linha de óculos da boutique.'),
-                },
-                {
-                  title: 'OFICINA & ATELIER',
-                  sub: 'Bancada e manutenção na hora',
-                  tag: 'MESTRE HIVO MARQUES',
-                  video: '/videos/ourives-bancada.mp4',
-                  poster: '/videos/ourives-bancada.jpg',
-                  action: () => setActiveTab('workshop'),
                 },
               ].map((item, idx) => (
                 <motion.div
@@ -348,6 +384,9 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                   <span className="rounded-full bg-[#0A0A0C]/70 px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider text-[#C9A84C] backdrop-blur-md">
                     {product.category}
                   </span>
+                  <span className="text-[10px] font-mono text-[#FAF8F5]/80 bg-[#0A0A0C]/60 px-2 py-0.5 rounded-full border border-white/10">
+                    {screen3PhotoIndex} / {PRODUCT_SHOTS.length}
+                  </span>
                 </div>
 
                 <h3
@@ -357,7 +396,7 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                       '0 1px 2px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.95), 0 0 24px rgba(0,0,0,0.75)',
                   }}
                 >
-                  {product.title}
+                  {PRODUCT_SHOTS[screen3PhotoIndex - 1]?.title || product.title}
                 </h3>
               </div>
             </div>
@@ -432,11 +471,183 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
+                onClick={() => {
+                  const currentPiece = PRODUCT_SHOTS[screen3PhotoIndex - 1]?.title || product.title;
+                  openWhatsApp(
+                    `Olá! Vim pelo site da Relojoaria Aliança e gostaria de encomendar:\n` +
+                    `• Peça: ${currentPiece}\n` +
+                    `• Metal: ${selectedMetal === 'Ouro' ? 'Ouro 18k' : 'Prata 950'}\n` +
+                    `• Aro: Tamanho ${selectedRingSize}${
+                      engravingText ? `\n• Gravação: "${engravingText}"` : ''
+                    }`
+                  );
+                }}
+                className="w-full py-3.5 bg-gradient-to-r from-[#D4943E] to-[#C9A84C] hover:from-[#C9A84C] hover:to-[#D4943E] text-[#0A0A0C] font-mono text-xs font-bold tracking-wider uppercase rounded-full flex items-center justify-center gap-2 shadow-xl shadow-[#C9A84C]/20"
+              >
+                <WhatsAppGlyph size={14} />
+                <span>PEDIR ORÇAMENTO NO WHATSAPP</span>
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* =========================================================
+            SCREEN 3B: JEWELRY DETAIL (Jóias em Ouro: Correntes & Pingentes)
+            ========================================================= */}
+        {activeTab === 'jewelry' && (
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            className="space-y-4 px-4 pt-4"
+          >
+            {/* Full-bleed photography showcase with touch swipe & navigation dots */}
+            <div
+              className="relative -mx-4 -mt-4"
+              style={{ touchAction: 'pan-y' }}
+              onPointerDown={handleJewelryPointerDown}
+              onPointerUp={handleJewelryPointerUp}
+              onPointerCancel={handleJewelryPointerCancel}
+            >
+              <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#0A0A0C]">
+                {JEWELRY_GALLERY_IMAGES.map((shot, i) => (
+                  <img
+                    key={shot.src}
+                    src={shot.src}
+                    alt={shot.alt}
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                    className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+                      jewelryPhotoIndex === i ? 'opacity-100 scale-100' : 'opacity-0 scale-98 pointer-events-none'
+                    }`}
+                  />
+                ))}
+
+                {/* Scrims */}
+                <div
+                  className="pointer-events-none absolute inset-x-0 top-0 h-[22%] bg-gradient-to-b from-[#0A0A0C]/80 to-transparent"
+                  aria-hidden="true"
+                />
+                <div
+                  className="pointer-events-none absolute inset-x-0 bottom-0 h-[45%] bg-gradient-to-t from-[#0A0A0C] via-[#0A0A0C]/70 to-transparent"
+                  aria-hidden="true"
+                />
+              </div>
+
+              {/* Jewelry Meta — overlaid on photography */}
+              <div className="absolute inset-x-0 bottom-0 z-10 space-y-1.5 px-4 pb-4">
+                {/* Navigation Dots */}
+                <div className="mb-2 flex items-center justify-center gap-1.5">
+                  {JEWELRY_GALLERY_IMAGES.map((shot, i) => (
+                    <button
+                      key={shot.src}
+                      onClick={() => setJewelryPhotoIndex(i)}
+                      aria-label={`Ver ${shot.title}`}
+                      className={`h-[3px] cursor-pointer rounded-full transition-all duration-300 ${
+                        jewelryPhotoIndex === i
+                          ? 'w-6 bg-[#C9A84C] shadow-[0_0_6px_rgba(0,0,0,0.9)]'
+                          : 'w-[3px] bg-white/60 shadow-[0_0_4px_rgba(0,0,0,0.9)] hover:bg-white/80'
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="rounded-full bg-[#0A0A0C]/80 px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-wider text-[#C9A84C] backdrop-blur-md border border-[#C9A84C]/30">
+                    {selectedMobilePiece.metal}
+                  </span>
+                  <span className="text-[10px] font-mono text-[#FAF8F5]/80 bg-[#0A0A0C]/60 px-2 py-0.5 rounded-full border border-white/10">
+                    {jewelryPhotoIndex + 1} / {JEWELRY_GALLERY_IMAGES.length}
+                  </span>
+                </div>
+
+                <h3
+                  className="text-xl font-serif leading-tight text-[#FAF8F5]"
+                  style={{
+                    textShadow:
+                      '0 1px 2px rgba(0,0,0,0.9), 0 2px 12px rgba(0,0,0,0.95), 0 0 24px rgba(0,0,0,0.75)',
+                  }}
+                >
+                  Correntes em Ouro e Prata
+                </h3>
+                <p className="text-[11px] text-[#C9A84C] font-mono">
+                  {JEWELRY_GALLERY_IMAGES[jewelryPhotoIndex]?.title}
+                </p>
+              </div>
+            </div>
+
+            {/* 1. Escolha da Peça */}
+            <div className="space-y-2">
+              <label className="text-xs font-mono text-[#FAF8F5] uppercase tracking-wider block">
+                1. Selecione a Peça:
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {JEWELRY_PIECE_OPTIONS.map((piece) => {
+                  const isSelected = mobilePieceId === piece.id;
+                  const isGold = piece.metal === 'Ouro 18k';
+                  return (
+                    <motion.button
+                      whileTap={{ scale: 0.96 }}
+                      key={piece.id}
+                      onClick={() => handleMobileSelectPiece(piece.id)}
+                      className={`p-3 rounded-2xl border text-left transition-all ${
+                        isSelected
+                          ? 'border-[#C9A84C] bg-[#C9A84C]/15 text-[#FAF8F5] shadow-[0_0_12px_rgba(201,168,76,0.3)]'
+                          : 'border-white/10 bg-[#121216] text-[#9A968E]'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between text-[10px] font-mono mb-1">
+                        <span className={`px-1.5 py-0.2 rounded ${isGold ? 'text-[#C9A84C]' : 'text-[#FAF8F5]'}`}>
+                          {piece.metal}
+                        </span>
+                      </div>
+                      <span className="block text-xs font-serif font-medium leading-tight">
+                        {piece.name}
+                      </span>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 2. Pingente: Sem pingente ou Com pingente */}
+            <div className="space-y-2 border-t border-white/5 pt-3">
+              <div className="flex items-center justify-between text-xs font-mono text-[#FAF8F5]">
+                <span className="uppercase tracking-wider">2. Pingente:</span>
+                <span className="text-[#C9A84C]">
+                  {mobilePendant === 'com-pingente' ? 'Com pingente' : 'Sem pingente'}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {PENDANT_OPTIONS.map((opt) => {
+                  const isSelected = mobilePendant === opt.id;
+                  return (
+                    <motion.button
+                      whileTap={{ scale: 0.96 }}
+                      key={opt.id}
+                      onClick={() => handleMobileSelectPendant(opt.id as 'sem-pingente' | 'com-pingente')}
+                      className={`py-3 px-3 rounded-xl border text-center text-xs font-mono tracking-wider uppercase transition-all ${
+                        isSelected
+                          ? 'border-[#C9A84C] bg-[#C9A84C] text-[#0A0A0C] font-bold shadow-[0_0_10px_rgba(201,168,76,0.4)]'
+                          : 'border-white/10 bg-[#121216] text-[#9A968E]'
+                      }`}
+                    >
+                      {opt.label}
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="space-y-2 pt-2">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() =>
                   openWhatsApp(
-                    `Olá! Vim pelo site e gostaria de encomendar pares de alianças em ${selectedMetal}, aro ${selectedRingSize}${
-                      engravingText ? `, com gravação "${engravingText}"` : ''
-                    }.`
+                    `Olá! Vim pelo site da Relojoaria Aliança e gostaria de encomendar:\n` +
+                    `• Peça: ${selectedMobilePiece.name} (${selectedMobilePiece.metal})\n` +
+                    `• Pingente: ${mobilePendant === 'com-pingente' ? 'Com pingente' : 'Sem pingente'}`
                   )
                 }
                 className="w-full py-3.5 bg-gradient-to-r from-[#D4943E] to-[#C9A84C] hover:from-[#C9A84C] hover:to-[#D4943E] text-[#0A0A0C] font-mono text-xs font-bold tracking-wider uppercase rounded-full flex items-center justify-center gap-2 shadow-xl shadow-[#C9A84C]/20"
@@ -444,6 +655,14 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
                 <WhatsAppGlyph size={14} />
                 <span>PEDIR ORÇAMENTO NO WHATSAPP</span>
               </motion.button>
+
+              <button
+                onClick={() => setActiveTab('categories')}
+                className="w-full py-2.5 text-[11px] font-mono text-[#9A968E] hover:text-[#FAF8F5] transition-colors flex items-center justify-center gap-1.5"
+              >
+                <ArrowLeft size={13} />
+                <span>VOLTAR PARA TODAS AS CATEGORIAS</span>
+              </button>
             </div>
           </motion.div>
         )}
@@ -566,7 +785,7 @@ export const MobileScreensCompanion: React.FC<MobileScreensCompanionProps> = ({
         <button
           onClick={() => setActiveTab('categories')}
           className={`flex flex-col items-center justify-center gap-1 text-[10px] font-mono tracking-wider transition-all ${
-            activeTab === 'categories' ? 'text-[#C9A84C] font-bold scale-105' : 'text-[#9A968E]'
+            activeTab === 'categories' || activeTab === 'jewelry' ? 'text-[#C9A84C] font-bold scale-105' : 'text-[#9A968E]'
           }`}
         >
           <Grid size={18} />

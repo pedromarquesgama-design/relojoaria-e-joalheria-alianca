@@ -14,6 +14,7 @@ import { SearchModal } from './components/SearchModal';
 import { AtelierModal } from './components/AtelierModal';
 import { MobileScreensCompanion } from './components/MobileScreensCompanion';
 import { MobileLandingPage } from './components/MobileLandingPage';
+import { GoldJewelrySection } from './components/GoldJewelrySection';
 
 export default function App() {
   const [isMobile, setIsMobile] = useState(() =>
@@ -39,12 +40,13 @@ export default function App() {
   }, []);
 
   // Cart operations
-  const handleAddToCart = (product: Product, ringSize?: string, engravingText?: string) => {
+  const handleAddToCart = (product: Product, ringSize?: string, engravingText?: string, chainLength?: string) => {
     setCartItems((prev) => {
       const existing = prev.find(
         (it) =>
           it.product.id === product.id &&
           it.ringSize === ringSize &&
+          it.chainLength === chainLength &&
           it.engravingText === engravingText
       );
       if (existing) {
@@ -52,7 +54,7 @@ export default function App() {
           it === existing ? { ...it, quantity: it.quantity + 1 } : it
         );
       }
-      return [...prev, { product, quantity: 1, ringSize, engravingText }];
+      return [...prev, { product, quantity: 1, ringSize, chainLength, engravingText }];
     });
   };
 
@@ -127,7 +129,7 @@ export default function App() {
           <main className="flex-1">
             {/* 2. Hero Section com Vídeos HD Chiaroscuro sincronizados aos slides */}
             <HeroSection
-              onExploreClick={() => handleScrollToSection('pecas-destaque')}
+              onExploreClick={(sectionId) => handleScrollToSection(sectionId || 'pecas-destaque')}
               onCustomQuoteClick={() => setAtelierOpen(true)}
             />
 
@@ -135,8 +137,23 @@ export default function App() {
 
             {/* 4. Categorias da Boutique com 4 vídeos reais em looping */}
             <CategoryShowcase
-              onSelectCategory={(catId) => handleScrollToSection('pecas-destaque')}
+              onSelectCategory={(catId) => {
+                if (catId === 'joias') {
+                  handleScrollToSection('joias');
+                } else if (catId === 'aliancas') {
+                  handleScrollToSection('pecas-destaque');
+                } else {
+                  handleScrollToSection('pecas-destaque');
+                }
+              }}
               onViewAll={() => handleScrollToSection('pecas-destaque')}
+            />
+
+            {/* Nova Seção: Coleção Jóias em Ouro 18K (Correntes & Pingentes) */}
+            <GoldJewelrySection
+              id="joias"
+              onSelectProduct={(p) => setSelectedProduct(p)}
+              onAddToCart={handleAddToCart}
             />
 
             {/* 5. Peças em Destaque (Spec-Driven Product Grid) */}

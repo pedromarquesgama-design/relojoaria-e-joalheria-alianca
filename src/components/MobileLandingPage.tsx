@@ -32,6 +32,7 @@ interface Slide {
   ctaLabel: string;
   /** Pre-filled WhatsApp message for the secondary CTA. */
   ctaMessage: string;
+  targetTab?: 'categories' | 'product' | 'jewelry' | 'workshop';
 }
 
 const SLIDES: Slide[] = [
@@ -44,6 +45,18 @@ const SLIDES: Slide[] = [
     ctaLabel: 'Conhecer o ateliê',
     ctaMessage:
       'Olá! Gostaria de agendar uma visita ao ateliê para saber sobre demais serviços.',
+    targetTab: 'product',
+  },
+  {
+    id: 'cordoes',
+    video: '/videos/animate_this_image_1080p_20261023180448.mp4',
+    poster: '/videos/animate_this_image_1080p_20261023180448.jpg',
+    alt: 'Fabricação de cordões em ouro e prata na Relojoaria e Joalheria Aliança',
+    headlineLines: ['FABRICAÇÃO DE', 'CORDÕES EM', 'OURO E PRATA'],
+    ctaLabel: 'Ver cordões e joias',
+    ctaMessage:
+      'Olá! Gostaria de um orçamento para fabricação sob medida de cordões em ouro e prata.',
+    targetTab: 'jewelry',
   },
   {
     id: 'heirlooms',
@@ -54,6 +67,7 @@ const SLIDES: Slide[] = [
     ctaLabel: 'Avaliar minha joia',
     ctaMessage:
       'Olá! Gostaria de avaliar a transformação da minha joia de família (reciclagem, ajuste ou polimento).',
+    targetTab: 'workshop',
   },
   {
     id: 'watches',
@@ -64,6 +78,7 @@ const SLIDES: Slide[] = [
     ctaLabel: 'Ver relógios disponíveis',
     ctaMessage:
       'Olá! Gostaria de consultar a disponibilidade de cronógrafos e a revisão de serviço na loja.',
+    targetTab: 'categories',
   },
 ];
 
@@ -73,10 +88,12 @@ const SWIPE_THRESHOLD = 48;
 
 interface MobileLandingPageProps {
   onExploreCatalogue?: () => void;
+  onNavigateTab?: (tab: 'home' | 'categories' | 'product' | 'jewelry' | 'workshop') => void;
 }
 
 export const MobileLandingPage: React.FC<MobileLandingPageProps> = ({
   onExploreCatalogue,
+  onNavigateTab,
 }) => {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(1);
@@ -292,7 +309,13 @@ export const MobileLandingPage: React.FC<MobileLandingPageProps> = ({
             type="button"
             key={slide.id}
             whileTap={{ scale: 0.985 }}
-            onClick={() => onExploreCatalogue?.()}
+            onClick={() => {
+              if (slide.targetTab && onNavigateTab) {
+                onNavigateTab(slide.targetTab);
+              } else {
+                onExploreCatalogue?.();
+              }
+            }}
             className="group flex w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#F0D98A] via-[#D4AF37] to-[#B8912A] px-6 py-3.5 text-[12px] font-bold uppercase tracking-[0.12em] text-[#14110A] shadow-[0_8px_26px_-6px_rgba(212,175,55,0.65),0_2px_12px_rgba(0,0,0,0.6)] transition-shadow duration-300 hover:shadow-[0_12px_36px_-6px_rgba(212,175,55,0.85),0_2px_12px_rgba(0,0,0,0.6)]"
           >
             <span>{slide.ctaLabel}</span>

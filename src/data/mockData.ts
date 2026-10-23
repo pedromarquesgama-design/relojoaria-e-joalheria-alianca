@@ -68,6 +68,7 @@ export const FEATURED_PRODUCTS: Product[] = [
     status: 'DISPONIVEL',
     statusText: 'DISPONÍVEL',
     imageType: 'aliancas-18k',
+    imageUrl: '/products/conjunto-dourado.webp',
     shortDescription: 'Par de alianças forjadas em Ouro Amarelo 18k 750 com acabamento chanfrado de alta precisão e interior anatômico para máximo conforto.',
     specs: {
       material: 'Ouro Amarelo 18k (Teor 750)',
@@ -106,23 +107,24 @@ export const FEATURED_PRODUCTS: Product[] = [
     id: 'prod-3',
     category: 'ALTA JOALHERIA',
     categoryTag: 'Exclusividade',
-    title: 'Anel Solitário Ouro 18k & Pedra Central',
+    title: 'Anel Solitário Ouro 18k & Pedra Rubi',
     ref: 'REF. JS-18K-14',
     price: 'R$ 1.980',
     rawPrice: 1980,
     status: 'DISPONIVEL',
     statusText: 'DISPONÍVEL',
     imageType: 'solitario-diamante',
-    shortDescription: 'Solitário clássico confeccionado em Ouro 18k com cravação em garras elevadas que maximizam a passagem de luz e o brilho da gema central lapidação brilhante.',
+    imageUrl: '/products/alianca-solitario-rubi.jpg',
+    shortDescription: 'Solitário clássico confeccionado em Ouro 18k com cravação em garras elevadas que destacam a gema rubi central lapidação brilhante.',
     specs: {
       material: 'Ouro Amarelo 18k 750',
       acabamento: 'Polimento espelhado diamantado',
-      pedraCentral: 'Gema selecionada com lapidação brilhante de alta refração',
-      largura: 'Aro delicado com 2.2 mm de espessura',
+      pedraCentral: 'Gema Rubi lapidação brilhante em garras elevadas de segurança',
+      largura: 'Aro delicado anatômico com 2.4 mm de espessura',
       gravacao: 'Interna com iniciais e data comemorativa',
       garantia: 'Certificado de Autenticidade e Manutenção Eterna',
     },
-    history: 'A quintessência do pedido de noivado. Desenvolvido para acomodar perfeitamente alianças de casamento em conjunto harmônico, mantendo a gema elevada com segurança.',
+    history: 'A quintessência do pedido de noivado e compromisso. Desenvolvido para acomodar perfeitamente alianças de casamento em conjunto harmônico, mantendo o rubi lapidado em destaque luminoso.',
     inStock: true,
   },
   {
@@ -146,6 +148,271 @@ export const FEATURED_PRODUCTS: Product[] = [
     },
     history: 'Forjada elo por elo no ateliê da Aliança. Uma joia de peso expressivo e durabilidade imbatível, feita para atravessar gerações sem perder o valor intrínseco.',
     inStock: false,
+  },
+];
+
+export interface JewelryPieceOption {
+  id: 'corrente-ouro' | 'corrente-prata' | 'pulseira-ouro' | 'pulseira-prata';
+  name: string;
+  category: string;
+  metal: 'Ouro 18k' | 'Prata 950';
+  type: 'Corrente' | 'Pulseira';
+  price: string;
+  rawPrice: number;
+  ref: string;
+  imageType: string;
+  description: string;
+  specs: {
+    material: string;
+    acabamento: string;
+    fecho: string;
+    garantia: string;
+  };
+}
+
+export const JEWELRY_PIECE_OPTIONS: JewelryPieceOption[] = [
+  {
+    id: 'corrente-ouro',
+    name: 'Corrente de Ouro',
+    category: 'JÓIAS EM OURO 18K',
+    metal: 'Ouro 18k',
+    type: 'Corrente',
+    price: 'Sob Consulta',
+    rawPrice: 0,
+    ref: 'REF. CO-18K-01',
+    imageType: 'corrente-grumet',
+    description: 'Corrente maciça forjada em Ouro Amarelo 18k 750 com polimento de alto brilho no ateliê da Aliança.',
+    specs: {
+      material: 'Ouro Amarelo 18k Maciço (Teor 750)',
+      acabamento: 'Polimento diamantado de alta precisão',
+      fecho: 'Fecho estruturado com trava de segurança dupla',
+      garantia: 'Garantia Eterna do Teor do Ouro 18k',
+    },
+  },
+  {
+    id: 'corrente-prata',
+    name: 'Corrente de Prata',
+    category: 'JÓIAS EM PRATA 950',
+    metal: 'Prata 950',
+    type: 'Corrente',
+    price: 'Sob Consulta',
+    rawPrice: 0,
+    ref: 'REF. CP-950-02',
+    imageType: 'corrente-grumet',
+    description: 'Corrente em Prata de Lei 950 maciça, forjada com acabamento diamantado brilhante e alta durabilidade.',
+    specs: {
+      material: 'Prata 950 Maciça Legítima',
+      acabamento: 'Polimento nobre com brilho espelhado',
+      fecho: 'Fecho resistente de engate rápido',
+      garantia: 'Certificado de Autenticidade da Prata 950',
+    },
+  },
+  {
+    id: 'pulseira-ouro',
+    name: 'Pulseira de Ouro',
+    category: 'JÓIAS EM OURO 18K',
+    metal: 'Ouro 18k',
+    type: 'Pulseira',
+    price: 'Sob Consulta',
+    rawPrice: 0,
+    ref: 'REF. PO-18K-03',
+    imageType: 'corrente-grumet',
+    description: 'Pulseira anatômica em Ouro 18k 750, elos robustos com encaixe suave ao pulso e fecho reforçado.',
+    specs: {
+      material: 'Ouro Amarelo 18k (Teor 750)',
+      acabamento: 'Polimento acetinado e faces espelhadas',
+      fecho: 'Fecho gaveta com trava de pressão',
+      garantia: 'Garantia Vitalícia do Ouro 18k',
+    },
+  },
+  {
+    id: 'pulseira-prata',
+    name: 'Pulseira de Prata',
+    category: 'JÓIAS EM PRATA 950',
+    metal: 'Prata 950',
+    type: 'Pulseira',
+    price: 'Sob Consulta',
+    rawPrice: 0,
+    ref: 'REF. PP-950-04',
+    imageType: 'corrente-grumet',
+    description: 'Pulseira clássica em Prata 950 maciça, elos maciços e fecho italiano de alta retenção.',
+    specs: {
+      material: 'Prata de Lei 950 Maciça',
+      acabamento: 'Polimento especial com pasta diamantada',
+      fecho: 'Fecho mosquetão italiano reforçado',
+      garantia: 'Garantia Vitalícia da Prata de Lei',
+    },
+  },
+];
+
+export const PENDANT_OPTIONS = [
+  { id: 'sem-pingente', label: 'Sem pingente', note: 'Apenas a peça lisa' },
+  { id: 'com-pingente', label: 'Com pingente', note: 'Pingente opcional incluso na consulta' },
+];
+
+export const JEWELRY_GALLERY_IMAGES = [
+  {
+    src: '/products/joias/corrente-portugues-estojo.jpg',
+    title: 'Corrente de Ouro 18k no Estojo',
+    alt: 'Corrente de ouro 18k elo português no estojo de veludo vermelho',
+    pieceMatch: 'corrente-ouro',
+  },
+  {
+    src: '/products/joias/pulseira-ouro-estojo.jpg',
+    title: 'Pulseira de Ouro 18k no Estojo',
+    alt: 'Pulseira em ouro 18k no estojo de veludo vermelho',
+    pieceMatch: 'pulseira-ouro',
+  },
+  {
+    src: '/products/joias/corrente-plaquinha-ouro.jpg',
+    title: 'Corrente com Pingente Placa em Ouro 18k',
+    alt: 'Corrente com pingente plaquinha em ouro 18k no estojo de veludo',
+    pieceMatch: 'com-pingente',
+  },
+  {
+    src: '/products/joias/pulseira-ouro-elos.jpg',
+    title: 'Pulseira de Ouro 18k Elos Maciços',
+    alt: 'Pulseira em ouro 18k com fecho reforçado sobre fundo escuro',
+    pieceMatch: 'pulseira-ouro',
+  },
+  {
+    src: '/products/joias/corrente-portugues-ouro.jpg',
+    title: 'Corrente de Ouro 18k Elo Português',
+    alt: 'Corrente de ouro 18k elo português sobre fundo escuro',
+    pieceMatch: 'corrente-ouro',
+  },
+];
+
+export const WEDDING_RING_SHOTS = [
+  {
+    src: '/products/conjunto-dourado.webp',
+    alt: 'Par de alianças e anel de diamante em ouro 18k sobre veludo vermelho',
+    title: 'Conjunto Alianças & Anel em Ouro 18k',
+  },
+  {
+    src: '/products/anel-diamante.webp',
+    alt: 'Anel de diamante solitário em caixa de veludo vermelho',
+    title: 'Anel Solitário Ouro 18k & Diamante',
+  },
+  {
+    src: '/products/alianca-solitario-rubi.jpg',
+    alt: 'Anel solitário em ouro 18k com pedra rubi central em estojo de veludo vermelho',
+    title: 'Anel Solitário Ouro 18k & Pedra Rubi',
+  },
+  {
+    src: '/products/brincos-dourados-estojo.webp',
+    alt: 'Par de alianças douradas em estojo de veludo vermelho',
+    title: 'Par de Alianças 18k Tradicional',
+  },
+  {
+    src: '/products/brincos-dourados-caixa.webp',
+    alt: 'Par de alianças douradas em caixa de veludo vermelho',
+    title: 'Alianças Chanfradas 6mm',
+  },
+  {
+    src: '/products/conjunto-prateado.webp',
+    alt: 'Conjunto de alianças prateadas com anel de diamante em veludo vermelho',
+    title: 'Conjunto Alianças em Prata 950 & Solitário',
+  },
+  {
+    src: '/products/brincos-prateados-estojo.webp',
+    alt: 'Par de alianças prateadas em estojo de veludo vermelho',
+    title: 'Par de Alianças em Prata de Lei 950',
+  },
+];
+
+export const GOLD_JEWELRY_HERO_PRODUCT: Product = {
+  id: 'prod-grumet-18k',
+  category: 'JÓIAS EM OURO & PRATA',
+  categoryTag: 'Ourivesaria Autoral',
+  title: 'Corrente de Ouro 18k 750',
+  ref: 'REF. CO-18K-01',
+  price: 'R$ 3.890',
+  rawPrice: 3890,
+  status: 'DISPONIVEL',
+  statusText: 'DISPONÍVEL OU SOB MEDIDA',
+  imageType: 'corrente-grumet',
+  shortDescription: 'Corrente maciça forjada em Ouro 18k 750 com polimento espelhado no ateliê da Aliança em Porto Seguro.',
+  specs: {
+    material: 'Ouro Amarelo 18k Maciço (Teor 750)',
+    acabamento: 'Polimento Diamantado Alto Brilho',
+    fecho: 'Fecho estruturado com trava de segurança',
+    gravacao: 'Timbre oficial 18k 750 e punção Aliança',
+    garantia: 'Garantia Eterna do Ouro e 1º Polimento Anual Grátis',
+  },
+  history: 'Forjada na bancada da Rua São Pedro em Porto Seguro. Uma joia clássica e atemporal concebida para durar gerações.',
+  inStock: true,
+};
+
+
+export const GOLD_JEWELRY_ITEMS: Product[] = [
+  GOLD_JEWELRY_HERO_PRODUCT,
+  {
+    id: 'prod-cruz-18k',
+    category: 'JÓIAS EM OURO 18K',
+    categoryTag: 'Pingentes de Fé',
+    title: 'Pingente Cruz Maciça em Ouro 18k 750',
+    ref: 'REF. PG-CRUZ-18K',
+    price: 'R$ 890',
+    rawPrice: 890,
+    status: 'DISPONIVEL',
+    statusText: 'DISPONÍVEL',
+    imageType: 'solitario-diamante',
+    shortDescription: 'Cruz esculpida em ouro 18k maciço com acabamento chanfrado e passador reforçado para correntes de até 6mm.',
+    specs: {
+      material: 'Ouro 18k 750 Maciço',
+      acabamento: 'Faces chanfradas com polimento espelhado',
+      largura: 'Dimensões: 32mm x 18mm',
+      gravacao: 'Punção 18K no passador',
+      garantia: 'Garantia Vitalícia do Ouro',
+    },
+    history: 'Símbolo eterno esculpido no fogo. Peça de presença marcante e atemporal, concebida para resistir ao uso diário contínuo.',
+    inStock: true,
+  },
+  {
+    id: 'prod-bento-18k',
+    category: 'JÓIAS EM OURO 18K',
+    categoryTag: 'Tradição & Proteção',
+    title: 'Medalha de São Bento em Ouro 18k',
+    ref: 'REF. PG-BENTO-18K',
+    price: 'R$ 1.150',
+    rawPrice: 1150,
+    status: 'DISPONIVEL',
+    statusText: 'DISPONÍVEL',
+    imageType: 'solitario-diamante',
+    shortDescription: 'Medalha dupla face com cunhagem de altíssima definição das inscrições sacras em latim e aro circular polido.',
+    specs: {
+      material: 'Ouro Amarelo 18k (750)',
+      acabamento: 'Cunhagem em alto relevo e fundo acetinado',
+      largura: 'Diâmetro: 20 mm',
+      gravacao: 'Inscrições em relevo frente e verso',
+      garantia: 'Garantia Eterna do Ouro 18k',
+    },
+    history: 'Uma das joias de devoção mais requisitadas na boutique de Porto Seguro, executada com precisão absoluta de cada caractere sacro.',
+    inStock: true,
+  },
+  {
+    id: 'prod-cartier-18k',
+    category: 'JÓIAS EM OURO 18K',
+    categoryTag: 'Clássico Eterno',
+    title: 'Corrente Cartier Longa Ouro 18k',
+    ref: 'REF. CR-CART-18K',
+    price: 'R$ 3.490',
+    rawPrice: 3490,
+    status: 'DISPONIVEL',
+    statusText: 'DISPONÍVEL',
+    imageType: 'corrente-grumet',
+    shortDescription: 'Malha Cartier clássica com elos retangulares alongados e acabamento polido reluzente.',
+    specs: {
+      material: 'Ouro 18k 750',
+      acabamento: 'Polimento manual na pasta diamantada',
+      largura: 'Espessura 3.2 mm | 60 cm',
+      fecho: 'Fecho mosquetão italiano anatômico',
+      gravacao: 'Timbre 750 no fecho',
+      garantia: 'Garantia Vitalícia do Ouro 18k',
+    },
+    history: 'Design parisiense adaptado com a robustez e pureza do ouro forjado na bancada do ateliê.',
+    inStock: true,
   },
 ];
 
@@ -184,3 +451,4 @@ export const BENTO_WATCH_ITEMS = [
     ref: 'OFICINA ESPECIALIZADA',
   },
 ];
+
